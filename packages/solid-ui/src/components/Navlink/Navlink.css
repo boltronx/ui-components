@@ -1,0 +1,86 @@
+.bx-Navlink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: var(--bx-font-size-sm);
+  color: var(--bx-text);
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--bx-radius-sm);
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--bx-duration) ease;
+
+  &:hover:not([data-disabled], [data-active]) {
+    background: var(--bx-surface-hover);
+  }
+
+  &:focus-visible {
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  &[data-active] {
+    font-weight: 600;
+    color: var(--bx-primary);
+    background: var(--bx-primary-light);
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--bx-disabled-opacity);
+    pointer-events: none;
+  }
+}
+
+.bx-Navlink-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.bx-Navlink-section {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+
+  > svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.bx-Navlink-chevron {
+  transition: transform 200ms ease;
+
+  [data-opened] > & {
+    transform: rotate(90deg);
+  }
+
+  > svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.bx-Navlink-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms ease;
+
+  &[data-opened] {
+    grid-template-rows: 1fr;
+  }
+}
+
+.bx-Navlink-children {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0;
+  padding-left: 2.25rem;
+  overflow: hidden;
+}

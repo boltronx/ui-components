@@ -1,0 +1,10 @@
+.bx-Group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  &[data-grow] > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}

@@ -1,0 +1,31 @@
+.bx-Text {
+  margin: 0;
+  font-size: inherit;
+  line-height: var(--bx-line-height);
+
+  &[data-size="xs"] {
+    font-size: var(--bx-font-size-xs);
+  }
+
+  &[data-size="sm"] {
+    font-size: var(--bx-font-size-sm);
+  }
+
+  &[data-size="md"] {
+    font-size: var(--bx-font-size-md);
+  }
+
+  &[data-size="lg"] {
+    font-size: var(--bx-font-size-lg);
+  }
+
+  &[data-size="xl"] {
+    font-size: var(--bx-font-size-xl);
+  }
+
+  &[data-truncate] {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

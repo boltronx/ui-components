@@ -1,0 +1,19 @@
+.bx-Card {
+  min-width: 0;
+  color: var(--bx-text);
+  background: var(--bx-surface);
+  border: 1px solid var(--bx-border);
+  border-radius: var(--bx-radius-sm);
+
+  &[data-borderless] {
+    border-color: transparent;
+  }
+
+  &[data-shadow="sm"] {
+    box-shadow: var(--bx-shadow-sm);
+  }
+
+  &[data-shadow="md"] {
+    box-shadow: var(--bx-shadow-md);
+  }
+}

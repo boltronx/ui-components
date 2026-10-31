@@ -1,0 +1,4 @@
+.bx-SimpleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--bx-grid-min), 100%), 1fr));
+}

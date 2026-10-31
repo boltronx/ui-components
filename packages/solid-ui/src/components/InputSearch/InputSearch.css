@@ -1,0 +1,11 @@
+/* Hide the browsers' own clear buttons; the component has its own */
+.bx-InputSearch {
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  &::-ms-clear {
+    display: none;
+  }
+}
