@@ -1,0 +1,27 @@
+.bx-Anchor {
+  color: var(--bx-primary);
+  text-decoration: none;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  border-radius: var(--bx-radius-sm);
+
+  &[data-underline="always"],
+  &[data-underline="hover"]:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  /* `component="button"`: an action that reads as a link, e.g. a row's main action in a Table. */
+  &:is(button) {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    text-align: inherit;
+    background: none;
+    border: 0;
+  }
+}

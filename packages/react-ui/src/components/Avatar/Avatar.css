@@ -1,0 +1,16 @@
+.bx-Avatar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--bx-font-size-sm);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--bx-primary-contrast);
+  text-transform: uppercase;
+  background-color: var(--bx-primary);
+  border-radius: 50%;
+  user-select: none;
+}

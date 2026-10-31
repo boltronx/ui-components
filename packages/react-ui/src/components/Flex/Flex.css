@@ -1,0 +1,36 @@
+/*
+ * Flex sets --bx-flex-direction (and one variable per breakpoint) inline. Media queries can't read
+ * variables, so the breakpoints are fixed here, mobile first: sm 36rem, md 48rem, lg 62rem, xl 75rem.
+ */
+.bx-Flex {
+  display: flex;
+  flex-direction: var(--bx-flex-direction, row);
+
+  &[data-inline] {
+    display: inline-flex;
+  }
+
+  @media (min-width: 36rem) {
+    &[data-direction-sm] {
+      flex-direction: var(--bx-flex-direction-sm);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    &[data-direction-md] {
+      flex-direction: var(--bx-flex-direction-md);
+    }
+  }
+
+  @media (min-width: 62rem) {
+    &[data-direction-lg] {
+      flex-direction: var(--bx-flex-direction-lg);
+    }
+  }
+
+  @media (min-width: 75rem) {
+    &[data-direction-xl] {
+      flex-direction: var(--bx-flex-direction-xl);
+    }
+  }
+}

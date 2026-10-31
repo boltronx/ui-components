@@ -1,0 +1,114 @@
+.bx-Button {
+  --bx-button-bg: var(--bx-surface);
+  --bx-button-hover: var(--bx-surface-hover);
+  --bx-button-border: var(--bx-border);
+  --bx-button-color: var(--bx-text);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-width: 4.5rem;
+  height: var(--bx-control-height);
+  margin: 0;
+  padding: 0 var(--bx-spacing-md);
+  font: inherit;
+  font-size: var(--bx-font-size-sm);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--bx-button-color);
+  white-space: nowrap;
+  background: var(--bx-button-bg);
+  border: 1px solid var(--bx-button-border);
+  border-radius: var(--bx-radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform var(--bx-duration) ease,
+    background-color var(--bx-duration) ease,
+    border-color var(--bx-duration) ease,
+    color var(--bx-duration) ease;
+
+  &:hover:not(:disabled) {
+    background: var(--bx-button-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--bx-disabled-opacity);
+  }
+
+  &[data-loading] {
+    cursor: progress;
+    opacity: 1;
+  }
+
+  &[data-loading]:active {
+    transform: none;
+  }
+
+  &[data-full-width] {
+    width: 100%;
+  }
+
+  &[data-with-left] {
+    padding-left: var(--bx-spacing-sm);
+  }
+
+  &[data-with-right] {
+    padding-right: var(--bx-spacing-sm);
+  }
+
+  &[data-variant="primary"] {
+    --bx-button-bg: var(--bx-primary);
+    --bx-button-hover: var(--bx-primary-hover);
+    --bx-button-border: var(--bx-primary);
+    --bx-button-color: var(--bx-primary-contrast);
+  }
+
+  &[data-variant="danger"] {
+    --bx-button-bg: var(--bx-danger);
+    --bx-button-hover: var(--bx-danger-hover);
+    --bx-button-border: var(--bx-danger);
+    --bx-button-color: var(--bx-danger-contrast);
+  }
+
+  &[data-variant="light"] {
+    --bx-button-bg: var(--bx-primary-light);
+    --bx-button-hover: color-mix(in oklab, var(--bx-primary-light), var(--bx-primary) 10%);
+    --bx-button-border: transparent;
+    --bx-button-color: var(--bx-primary);
+  }
+
+  &[data-variant="subtle"] {
+    --bx-button-bg: transparent;
+    --bx-button-border: transparent;
+
+    &:hover:not(:disabled) {
+      color: var(--bx-text-strong);
+    }
+  }
+}
+
+.bx-Button-label,
+.bx-Button-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}

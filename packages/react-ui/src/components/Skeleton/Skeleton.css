@@ -1,0 +1,36 @@
+.bx-Skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--bx-skeleton);
+  border-radius: var(--bx-radius-sm);
+
+  &[data-circle] {
+    border-radius: 50%;
+  }
+
+  &[data-animate]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      var(--bx-skeleton) 0%,
+      var(--bx-skeleton-shine) 50%,
+      var(--bx-skeleton) 100%
+    );
+    transform: translateX(-100%);
+    animation: bx-skeleton-shimmer 1.5s infinite;
+  }
+}
+
+@keyframes bx-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bx-Skeleton[data-animate]::after {
+    display: none;
+  }
+}

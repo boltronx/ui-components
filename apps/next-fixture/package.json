@@ -1,0 +1,20 @@
+{
+  "name": "next-fixture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "test": "node scripts/check-build.mjs",
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "@boltronx/react-ui": "workspace:*",
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
+  }
+}

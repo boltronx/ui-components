@@ -1,0 +1,92 @@
+.bx-IconButton {
+  --bx-icon-button-color: var(--bx-text);
+  --bx-icon-button-border: var(--bx-border);
+  --bx-icon-button-hover: var(--bx-surface-active);
+
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--bx-control-height);
+  height: var(--bx-control-height);
+  margin: 0;
+  padding: 0;
+  color: var(--bx-icon-button-color);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--bx-radius-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--bx-duration) ease,
+    transform var(--bx-duration) ease;
+
+  > svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &[data-color="primary"] {
+    --bx-icon-button-color: var(--bx-primary);
+    --bx-icon-button-border: color-mix(in oklab, var(--bx-primary), transparent 60%);
+    --bx-icon-button-hover: var(--bx-primary-light);
+  }
+
+  &[data-color="danger"] {
+    --bx-icon-button-color: var(--bx-danger);
+    --bx-icon-button-border: color-mix(in oklab, var(--bx-danger), transparent 60%);
+    --bx-icon-button-hover: var(--bx-danger-light);
+  }
+
+  &[data-bordered] {
+    border-color: var(--bx-icon-button-border);
+
+    > svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--bx-icon-button-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--bx-disabled-opacity);
+  }
+}
+
+.bx-IconButton-wrapper {
+  display: inline-flex;
+}
+
+/* Portaled with FloatingPanel, which places it; above every other layer. */
+.bx-FloatingPanel.bx-IconButton-tooltip {
+  z-index: var(--bx-z-tooltip);
+  padding: 0.25rem 0.5rem;
+  font-size: var(--bx-font-size-xs);
+  white-space: nowrap;
+  color: var(--bx-tooltip-text);
+  background: var(--bx-tooltip-bg);
+  border-radius: var(--bx-radius-md);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--bx-duration) ease;
+
+  &[data-open="true"] {
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}

@@ -1,0 +1,154 @@
+/*
+ * A Switch is a Checkbox row (.bx-Checkbox.bx-Switch) whose control is a track and thumb. The
+ * real input covers the track, invisible, and the track draws its state from the input's :checked.
+ */
+.bx-Switch {
+  --bx-switch-width: 2.25rem;
+  --bx-switch-height: 1.25rem;
+  --bx-switch-thumb: 0.875rem;
+  --bx-switch-inset: 0.1875rem;
+
+  &[data-size="sm"] {
+    --bx-switch-width: 1.75rem;
+    --bx-switch-height: 1rem;
+    --bx-switch-thumb: 0.625rem;
+  }
+
+  &[data-size="lg"] {
+    --bx-switch-width: 3rem;
+    --bx-switch-height: 1.625rem;
+    --bx-switch-thumb: 1.125rem;
+    --bx-switch-inset: 0.25rem;
+  }
+
+  /* Room for a track label beside the thumb. */
+  &[data-with-labels] {
+    --bx-switch-width: calc(var(--bx-switch-height) * 2.6);
+  }
+
+  &[data-disabled] .bx-Switch-control {
+    cursor: not-allowed;
+    opacity: var(--bx-disabled-opacity);
+  }
+
+  &[data-readonly] .bx-Switch-input {
+    cursor: default;
+  }
+}
+
+.bx-Switch-control {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: var(--bx-switch-width);
+  height: var(--bx-switch-height);
+}
+
+.bx-Switch-input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.bx-Switch-track {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bx-surface);
+  border: 1px solid var(--bx-border-strong);
+  border-radius: calc(var(--bx-switch-height) / 2);
+  transition:
+    background-color var(--bx-duration) ease,
+    border-color var(--bx-duration) ease;
+
+  .bx-Switch:not([data-readonly]) .bx-Switch-input:hover:not(:disabled) + & {
+    border-color: var(--bx-focus);
+  }
+
+  .bx-Switch-input:focus-visible + & {
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  .bx-Switch-input:checked + & {
+    background: var(--bx-primary);
+    border-color: var(--bx-primary);
+  }
+}
+
+.bx-Switch-thumb {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--bx-switch-inset) - 1px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--bx-switch-thumb);
+  height: var(--bx-switch-thumb);
+  color: var(--bx-surface);
+  background: var(--bx-text-dimmed);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  transition:
+    left var(--bx-duration) ease,
+    background-color var(--bx-duration) ease;
+
+  & svg {
+    width: 75%;
+    height: 75%;
+  }
+
+  .bx-Switch-input:checked + .bx-Switch-track & {
+    left: calc(100% - var(--bx-switch-thumb) - var(--bx-switch-inset) + 1px);
+    color: var(--bx-primary);
+    background: var(--bx-primary-contrast);
+  }
+}
+
+/* The on label sits where the thumb isn't: on the left while on, the off label on the right. */
+.bx-Switch-onLabel,
+.bx-Switch-offLabel {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  font-size: calc(var(--bx-switch-height) * 0.5);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translateY(-50%);
+
+  & svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.bx-Switch-onLabel {
+  left: calc(var(--bx-switch-inset) + 0.125rem);
+  display: none;
+  color: var(--bx-primary-contrast);
+
+  .bx-Switch-input:checked + .bx-Switch-track & {
+    display: flex;
+  }
+}
+
+.bx-Switch-offLabel {
+  right: calc(var(--bx-switch-inset) + 0.125rem);
+  color: var(--bx-text-dimmed);
+
+  .bx-Switch-input:checked + .bx-Switch-track & {
+    display: none;
+  }
+}

@@ -1,0 +1,104 @@
+/*
+ * Design tokens. Components read only these variables, so theming is plain CSS.
+ *
+ * Colors use light-dark(<light>, <dark>), resolved from `color-scheme`: the OS setting by default,
+ * or `data-theme="light" | "dark"` on <html> once a mode is chosen. Override any token from your
+ * own CSS; it sits outside the `bx` layer, so it always wins:
+ *
+ *   :root { --bx-primary: light-dark(#dc2626, #b61d1d); }
+ */
+:root {
+  color-scheme: light dark;
+
+  /* Base colors: the ones you set to theme the library */
+  --bx-primary: light-dark(#7950f2, #6741d9);
+  --bx-danger: light-dark(#fa5252, #e03131);
+  --bx-success: light-dark(#40c057, #2f9e44);
+  --bx-warning: light-dark(#fab005, #f59f00);
+  --bx-body: light-dark(#f8f7ff, #0b0d19);
+  --bx-surface: light-dark(#ffffff, #1a1f38);
+  --bx-text: light-dark(#1e293b, #cbd5e1);
+  --bx-border: light-dark(#ced4da, #272f54);
+
+  /* Derived colors: computed once from the base colors, overridable one by one */
+  --bx-text-strong: light-dark(#000000, #ffffff);
+  --bx-text-dimmed: color-mix(in oklab, var(--bx-text), transparent 40%);
+  --bx-placeholder: color-mix(in oklab, var(--bx-text), transparent 65%);
+  --bx-surface-hover: color-mix(in oklab, var(--bx-surface), var(--bx-text) 6%);
+  --bx-surface-active: color-mix(in oklab, var(--bx-surface), var(--bx-text) 11%);
+  --bx-border-strong: color-mix(in oklab, var(--bx-border), var(--bx-text) 20%);
+  --bx-focus: color-mix(in oklab, var(--bx-border), var(--bx-primary) 50%);
+  --bx-focus-ring: 0 0 0 2px color-mix(in oklab, var(--bx-primary), transparent 60%);
+  --bx-overlay: rgb(0 0 0 / 0.45);
+  --bx-tooltip-bg: light-dark(#1e293b, #e2e8f0);
+  --bx-tooltip-text: light-dark(#ffffff, #0f172a);
+  --bx-skeleton: color-mix(in oklab, var(--bx-border), var(--bx-text) 10%);
+  --bx-skeleton-shine: color-mix(in oklab, var(--bx-border), var(--bx-text) 20%);
+  --bx-scrollbar: color-mix(in oklab, var(--bx-text), transparent 65%);
+  --bx-scrollbar-hover: color-mix(in oklab, var(--bx-text), transparent 45%);
+
+  --bx-primary-hover: color-mix(in oklab, var(--bx-primary), black 10%);
+  --bx-primary-light: color-mix(in oklab, var(--bx-primary), transparent 85%);
+  --bx-primary-contrast: #ffffff;
+  --bx-danger-hover: color-mix(in oklab, var(--bx-danger), black 10%);
+  --bx-danger-light: color-mix(in oklab, var(--bx-danger), transparent 85%);
+  --bx-danger-contrast: #ffffff;
+  --bx-success-hover: color-mix(in oklab, var(--bx-success), black 10%);
+  --bx-success-light: color-mix(in oklab, var(--bx-success), transparent 85%);
+  --bx-success-contrast: #ffffff;
+  --bx-warning-hover: color-mix(in oklab, var(--bx-warning), black 10%);
+  --bx-warning-light: color-mix(in oklab, var(--bx-warning), transparent 85%);
+  --bx-warning-contrast: #1e293b;
+
+  /* Typography */
+  --bx-font-family: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --bx-font-family-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  --bx-line-height: 1.5;
+  --bx-font-size-xs: 0.75rem;
+  --bx-font-size-sm: 0.875rem;
+  --bx-font-size-md: 1rem;
+  --bx-font-size-lg: 1.125rem;
+  --bx-font-size-xl: 1.25rem;
+  --bx-h1: 2rem;
+  --bx-h2: 1.625rem;
+  --bx-h3: 1.375rem;
+  --bx-h4: 1.125rem;
+  --bx-h5: 1rem;
+  --bx-h6: 0.875rem;
+
+  /* Spacing, used by `gap`, `padding` and similar props */
+  --bx-spacing-xs: 0.25rem;
+  --bx-spacing-sm: 0.5rem;
+  --bx-spacing-md: 1rem;
+  --bx-spacing-lg: 1.5rem;
+  --bx-spacing-xl: 2rem;
+
+  /* Shape */
+  --bx-radius-sm: 2px;
+  --bx-radius-md: 4px;
+  --bx-radius-lg: 8px;
+  --bx-control-height: 2rem;
+  --bx-shadow-sm:
+    0 4px 12px light-dark(rgb(85 75 241 / 0.03), rgb(0 0 0 / 0.35)),
+    0 10px 24px light-dark(rgb(15 23 42 / 0.05), transparent);
+  --bx-shadow-md:
+    0 12px 24px light-dark(rgb(85 75 241 / 0.04), rgb(0 0 0 / 0.5)),
+    0 24px 48px light-dark(rgb(15 23 42 / 0.08), transparent);
+
+  /* Behavior */
+  --bx-disabled-opacity: 0.55;
+  --bx-duration: 140ms;
+  /* Layers, lowest first: modals, dropdowns (above the modal they open from), messages, tooltips. */
+  --bx-z-modal: 1000;
+  --bx-z-popover: 1100;
+  --bx-z-toast: 1200;
+  --bx-z-tooltip: 1300;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
