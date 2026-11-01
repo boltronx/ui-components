@@ -10,8 +10,8 @@ minimumReleaseAge: 4320
 allowBuilds:
   esbuild: true
 
-# GHSA-g3hv-75wg-m249 (minimatch DoS via globparts amplification) is fixed only in 11.x, which
-# ESLint and typescript-eslint don't allow yet (they ask for ^10). Lint runs fine on 11; remove
-# this override once they move to it.
+# GHSA-g3hv-75wg-m249, a minimatch denial of service through crafted glob patterns, is fixed
+# only in 11.x, which ESLint and typescript-eslint don't allow yet (they ask for ^10). Lint runs
+# fine on 11; remove this override once they move to it.
 overrides:
   minimatch: ^11.0.3
