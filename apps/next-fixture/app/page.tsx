@@ -38,7 +38,7 @@ async function save(formData: FormData) {
 export default function Page() {
   return (
     <main>
-      <Stack gap="lg" style={{ padding: 24, maxWidth: 720 }}>
+      <Stack gap="lg" style={{ padding: 24, maxWidth: 760, margin: "0 auto" }}>
         <Title order={1}>Server-rendered page</Title>
         <Text c="dimmed">
           Rendered by a Server Component. See <Anchor href="https://nextjs.org">Next.js</Anchor> and{" "}
