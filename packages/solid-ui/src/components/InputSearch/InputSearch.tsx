@@ -66,7 +66,9 @@ export function InputSearch(props: InputSearchProps) {
   };
 
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = event => {
-    if (typeof local.onKeyDown === "function") local.onKeyDown(event);
+    const handler = local.onKeyDown;
+    if (typeof handler === "function") handler(event);
+    else handler?.[0](handler[1], event);
     // Enter asks for results now; the form's own Enter handling is left as it is.
     if (event.key === "Enter" && !isCompositionKey(event)) search.now(event.currentTarget.value);
   };
