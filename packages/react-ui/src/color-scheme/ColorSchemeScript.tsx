@@ -1,6 +1,8 @@
 import { type ColorSchemeOptions, colorSchemeScript } from "./script";
 
-export interface ColorSchemeScriptProps extends ColorSchemeOptions {
+export interface ColorSchemeScriptProps extends Omit<ColorSchemeOptions, "key"> {
+  /** localStorage key that holds the chosen mode. Default "bx-color-scheme". */
+  storageKey?: string;
   /** A Content-Security-Policy nonce, when the page's policy requires one for inline scripts. */
   nonce?: string;
 }
@@ -13,6 +15,6 @@ export interface ColorSchemeScriptProps extends ColorSchemeOptions {
  *   <html lang="en" suppressHydrationWarning>
  *     <head><ColorSchemeScript /></head>
  */
-export function ColorSchemeScript({ nonce, ...options }: ColorSchemeScriptProps) {
-  return <script nonce={nonce} dangerouslySetInnerHTML={{ __html: colorSchemeScript(options) }} />;
+export function ColorSchemeScript({ nonce, storageKey, ...options }: ColorSchemeScriptProps) {
+  return <script nonce={nonce} dangerouslySetInnerHTML={{ __html: colorSchemeScript({ ...options, key: storageKey }) }} />;
 }
