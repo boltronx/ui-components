@@ -19,10 +19,10 @@
     "pnpm": ">=12.17.0"
   },
   "scripts": {
-    "dev:react": "pnpm --filter @boltronx/react-ui build && pnpm --parallel --filter @boltronx/react-ui --filter docs-react dev",
-    "dev:solid": "pnpm --filter @boltronx/solid-ui build && pnpm --parallel --filter @boltronx/solid-ui --filter docs-solid dev",
-    "dev:next": "pnpm --filter @boltronx/react-ui build && pnpm --parallel --filter @boltronx/react-ui --filter next-fixture dev",
-    "dev:start": "pnpm --filter @boltronx/solid-ui build && pnpm --parallel --filter @boltronx/solid-ui --filter start-fixture dev",
+    "dev:react": "node scripts/dev.mjs @boltronx/react-ui docs-react",
+    "dev:solid": "node scripts/dev.mjs @boltronx/solid-ui docs-solid",
+    "dev:next": "node scripts/dev.mjs @boltronx/react-ui next-fixture",
+    "dev:start": "node scripts/dev.mjs @boltronx/solid-ui start-fixture",
     "build": "pnpm --filter \"./packages/*\" build && pnpm --filter docs-react --filter docs-solid build",
     "test": "pnpm --filter \"./packages/*\" test && pnpm --filter docs-react test",
     "test:coverage": "pnpm --filter \"./packages/*\" test:coverage",
