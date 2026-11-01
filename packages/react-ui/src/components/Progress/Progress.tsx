@@ -1,4 +1,4 @@
-import { type BaseProps, cx } from "../../utils/style";
+import { type BaseProps, cx, mergeStyle } from "../../utils/style";
 
 export interface ProgressProps extends BaseProps {
   value: number;
@@ -24,7 +24,7 @@ export function Progress(props: ProgressProps) {
   return (
     <div
       className={cx("bx-Progress", props.className)}
-      style={props.style}
+      style={mergeStyle(props.style, { "--bx-progress-percent": `${percentage}%` })}
       data-size={props.size ?? "md"}
       data-striped={props.striped || props.animated ? "" : undefined}
       data-animated={props.animated ? "" : undefined}
@@ -38,7 +38,18 @@ export function Progress(props: ProgressProps) {
         className="bx-Progress-bar"
         style={{ width: `${percentage}%`, backgroundColor: props.color }}
       />
-      {props.label ? <span className="bx-Progress-label">{props.label}</span> : null}
+      {props.label ? (
+        <>
+          {/*
+            Drawn twice: in text color over the empty track, and in the bar's contrast color
+            clipped to the filled part, so every letter is readable at any value.
+          */}
+          <span className="bx-Progress-label">{props.label}</span>
+          <span className="bx-Progress-label" data-filled="" aria-hidden="true">
+            {props.label}
+          </span>
+        </>
+      ) : null}
     </div>
   );
 }

@@ -15,6 +15,18 @@ describe("Progress", () => {
     expect(bar().style.width).toBe("50%");
   });
 
+  it("draws the label a second time for the filled part, hidden from assistive tech", () => {
+    render(<Progress value={30} max={60} label="Uploading" />);
+    const [label, filled] = document.querySelectorAll<HTMLElement>(".bx-Progress-label");
+    expect(label).not.toHaveAttribute("aria-hidden");
+    expect(filled).toHaveAttribute("aria-hidden", "true");
+    expect(filled).toHaveAttribute("data-filled");
+    // The filled copy is clipped to this width in CSS.
+    expect(screen.getByRole("progressbar").style.getPropertyValue("--bx-progress-percent")).toBe(
+      "50%"
+    );
+  });
+
   it("keeps aria-valuenow within 0 and max", () => {
     render(<Progress value={150} />);
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "100");

@@ -1,20 +1,17 @@
 import { type BaseProps, cx, mergeStyle } from "../../utils/style";
 
-let segmenter: Intl.Segmenter | undefined;
-
 /**
- * The first `count` characters as a reader sees them: charAt would split an emoji or 𠮷 in half,
- * and code points would still split a flag (🇵🇭), a ZWJ emoji (👩‍💻) or a combined accent (é).
+ * One character as a reader sees it: a flag (🇵🇭), or a code point with the marks, skin tones and
+ * tags that join it (é, 👍🏽, 🏴󠁧󠁢󠁥󠁮󠁧󠁿), and the ZWJ emoji it begins (👩‍💻). Not Intl.Segmenter, which
+ * Firefox lacks before 125 and whose rules vary with each engine's Unicode version: the server
+ * and the browser must give the same initials, or hydration fails.
  */
+const CHARACTER =
+  /\p{Regional_Indicator}{2}|\P{M}[\p{M}\p{Emoji_Modifier}\u{E0020}-\u{E007F}]*(?:‍\P{M}[\p{M}\p{Emoji_Modifier}]*)*/gu;
+
+/** The first `count` characters: charAt would split 𠮷 in half, and code points a flag or é. */
 function leading(text: string, count = 1): string {
-  if (typeof Intl.Segmenter !== "function") return Array.from(text).slice(0, count).join("");
-  segmenter ??= new Intl.Segmenter();
-  const parts: string[] = [];
-  for (const { segment } of segmenter.segment(text)) {
-    if (parts.length === count) break;
-    parts.push(segment);
-  }
-  return parts.join("");
+  return (text.match(CHARACTER) ?? []).slice(0, count).join("");
 }
 
 /** Initials for a name: "Ada Lovelace" -> "AL"; one word gives its first two letters. */

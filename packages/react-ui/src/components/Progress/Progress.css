@@ -51,16 +51,25 @@
   }
 }
 
+/* Both copies cover the whole track, so the clip below is measured against the track. */
 .bx-Progress-label {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.625rem;
   font-weight: 700;
+  line-height: 1;
   white-space: nowrap;
-  color: var(--bx-primary-contrast);
+  color: var(--bx-text);
   pointer-events: none;
-  transform: translate(-50%, -52%);
+
+  &[data-filled] {
+    color: var(--bx-primary-contrast);
+    clip-path: inset(0 calc(100% - var(--bx-progress-percent)) 0 0);
+    transition: clip-path 300ms ease;
+  }
 }
 
 @keyframes bx-progress-stripes {

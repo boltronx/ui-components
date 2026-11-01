@@ -26,6 +26,24 @@ describe("getInitials", () => {
     // "e" followed by a combining acute accent
     expect(getInitials("é Smith")).toBe("éS");
   });
+
+  it("keeps skin tones, tag flags and boxed digits whole", () => {
+    expect(getInitials("👍🏽 Thumbs")).toBe("👍🏽T");
+    expect(getInitials("🏴󠁧󠁢󠁥󠁮󠁧󠁿 England")).toBe("🏴󠁧󠁢󠁥󠁮󠁧󠁿E");
+    expect(getInitials("1️⃣ One")).toBe("1️⃣O");
+  });
+
+  it("gives the same initials where Intl.Segmenter is missing, as in Firefox before 125", () => {
+    const names = ["🇵🇭 Manila", "👩‍💻 Dev", "👍🏽 Thumbs", "𠮷田 太郎"];
+    const before = names.map(name => getInitials(name));
+    const original = Intl.Segmenter;
+    Object.defineProperty(Intl, "Segmenter", { value: undefined, configurable: true });
+    try {
+      expect(names.map(name => getInitials(name))).toEqual(before);
+    } finally {
+      Object.defineProperty(Intl, "Segmenter", { value: original, configurable: true });
+    }
+  });
 });
 
 describe("Avatar", () => {
