@@ -166,7 +166,7 @@ The styles use `light-dark()`, CSS nesting and `color-mix()`, so they need Chrom
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). To report a security issue, see [SECURITY.md](SECURITY.md).
+See [CONTRIBUTING.md](https://github.com/boltronx/ui-components/blob/main/CONTRIBUTING.md). To report a security issue, see [SECURITY.md](https://github.com/boltronx/ui-components/blob/main/SECURITY.md).
 
 ## License
 
