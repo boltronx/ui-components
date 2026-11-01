@@ -48,7 +48,10 @@ function useCitySearch(log: (line: string) => void) {
   const [loading, setLoading] = useState(false);
   const search = (query: string, signal: AbortSignal) => {
     log(`request "${query}"`);
-    signal.addEventListener("abort", () => log(`cancelled "${query}"`));
+    signal.addEventListener("abort", () => {
+      log(`cancelled "${query}"`);
+      setLoading(false);
+    }, { once: true });
     setLoading(true);
     searchCities(query, signal)
       .then(setOptions)
