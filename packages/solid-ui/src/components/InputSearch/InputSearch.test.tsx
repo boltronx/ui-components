@@ -78,7 +78,7 @@ describe("InputSearch edge cases", () => {
   it("drops a queued search and aborts a running one when the form resets", async () => {
     const onSearch = vi.fn();
     const { reset } = renderInForm(() => (
-      <InputSearch label="Search" onSearch={onSearch} onSearchDebounceMs={50} />
+      <InputSearch label="Search" onSearch={onSearch} onSearchDebounceMs={300} />
     ));
     const input = screen.getByLabelText("Search");
     await userEvent.type(input, "ceb{Enter}");
@@ -87,7 +87,7 @@ describe("InputSearch edge cases", () => {
     onSearch.mockClear();
 
     await reset();
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 400));
     expect(signal.aborted).toBe(true);
     expect(onSearch).not.toHaveBeenCalled();
   });

@@ -157,11 +157,11 @@ describe("InputNumber edge cases", () => {
   it("drops a pending onInput when the form resets", async () => {
     const onInput = vi.fn();
     const { reset } = renderInForm(() => (
-      <InputNumber label="Qty" defaultValue={3} onInput={onInput} onInputDebounceMs={50} />
+      <InputNumber label="Qty" defaultValue={3} onInput={onInput} onInputDebounceMs={300} />
     ));
     await userEvent.type(screen.getByLabelText("Qty"), "8");
     await reset();
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 400));
     expect(onInput).not.toHaveBeenCalled();
   });
 

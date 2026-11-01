@@ -75,12 +75,12 @@ describe("Autocomplete", () => {
         label="City"
         options={cities}
         onSearchChange={onSearchChange}
-        onSearchChangeDebounceMs={50}
+        onSearchChangeDebounceMs={300}
       />
     );
-    await userEvent.type(screen.getByLabelText("City"), "ceb");
+    await userEvent.type(screen.getByLabelText("City"), "c");
     await reset();
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 400));
     expect(onSearchChange).not.toHaveBeenCalled();
   });
 

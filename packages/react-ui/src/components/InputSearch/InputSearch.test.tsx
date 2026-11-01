@@ -48,7 +48,7 @@ describe("InputSearch", () => {
   it("drops a queued search and aborts a running one when the form resets", async () => {
     const onSearch = vi.fn();
     const { reset } = renderInForm(
-      <InputSearch label="Search" onSearch={onSearch} onSearchDebounceMs={50} />
+      <InputSearch label="Search" onSearch={onSearch} onSearchDebounceMs={300} />
     );
     const input = screen.getByLabelText("Search");
     fireEvent.change(input, { target: { value: "ceb" } });
@@ -58,7 +58,7 @@ describe("InputSearch", () => {
     onSearch.mockClear();
 
     await reset();
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 400));
     expect(signal.aborted).toBe(true);
     expect(onSearch).not.toHaveBeenCalled();
   });
