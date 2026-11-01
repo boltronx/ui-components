@@ -46,10 +46,11 @@ const SERVER_COMPONENTS = [
 const isClient = (code: string) => /^["']use client["'];/.test(code.trimStart());
 
 // Runs against dist, so it needs a current build first (CI builds before testing).
-describe.skipIf(!hasCurrentBuild("server component boundaries"))(
+const currentBuild = hasCurrentBuild("server component boundaries");
+describe.skipIf(!currentBuild)(
   "server component boundaries",
   () => {
-    const modules = builtModules(dist).map(path => ({
+    const modules = (currentBuild ? builtModules(dist) : []).map(path => ({
       name: relative(dist, path).replaceAll("\\", "/"),
       code: readFileSync(path, "utf8")
     }));
