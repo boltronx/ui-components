@@ -13,6 +13,13 @@ describe("number helpers", () => {
     expect(roundNumber(-2.5, 0)).toBe(-3);
   });
 
+  it("never shows a negative zero", () => {
+    expect(Object.is(roundNumber(-0.001, 2), 0)).toBe(true);
+    expect(formatNumber(-0.001, 2)).toBe("0.00");
+    expect(formatNumber(-0, 2)).toBe("0.00");
+    expect(formatNumber(-0.01, 2)).toBe("-0.01");
+  });
+
   it("formats and parses grouped numbers", () => {
     expect(formatNumber(1234.5, 2)).toBe("1,234.50");
     expect(formatNumber(null)).toBe("");

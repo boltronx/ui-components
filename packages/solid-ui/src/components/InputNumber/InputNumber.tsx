@@ -74,7 +74,8 @@ export function roundNumber(value: number, decimals: number): number {
   const factor = 10 ** normalizeDecimals(decimals);
   const clean = stripFloatNoise(value);
   const rounded = Math.round(stripFloatNoise(Math.abs(clean) * factor)) / factor;
-  return clean < 0 ? -rounded : rounded;
+  // A negative that rounds to zero is 0, not -0, which Intl would show as "-0.00".
+  return clean < 0 && rounded !== 0 ? -rounded : rounded;
 }
 
 /** Formats with grouping, e.g. formatNumber(1234.5, 2) === "1,234.50". */
@@ -86,7 +87,9 @@ export function formatNumber(value: number | null | undefined, decimals?: Decima
   if (!formatter) {
     formatter = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: resolved.min,
-      maximumFractionDigits: resolved.max
+      maximumFractionDigits: resolved.max,
+      // No "-0.00" for -0 or a negative that rounds to zero; a minus only on what stays negative.
+      signDisplay: "negative"
     });
     formatterCache.set(cacheKey, formatter);
   }
