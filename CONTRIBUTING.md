@@ -95,7 +95,7 @@ a GitHub release with generated notes, grouped by pull request label (see `.gith
 `minor`, `major`, `prerelease`, ...) or an exact version, or leave it empty to publish the
 version already in `package.json`. Prereleases go to the `next` dist-tag unless you pick another.
 
-Re-running a failed release is safe: each step is skipped if it already happened.
+If a release fails after the version commit is pushed, rerun it with an empty version input to publish the existing version; rerunning the same bump would increment the version again.
 
 ### One-time setup
 
