@@ -11,8 +11,8 @@ Please **don't open a public issue**. Report it privately through
 instead.
 
 Include what you found, how to reproduce it, and the impact you expect. You'll get a reply within
-a week. Once a fix is released, the advisory is published, with credit to you unless you'd rather
-stay anonymous.
+7 days. Disclosure is coordinated: the vulnerability stays private until a fix is released, and
+then the advisory is published, with credit to you unless you'd rather stay anonymous.
 
 ## How releases are protected
 
