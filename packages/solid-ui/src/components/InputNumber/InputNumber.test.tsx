@@ -152,3 +152,26 @@ describe("InputNumber limits", () => {
     expect(screen.getByLabelText("High")).toHaveValue("1.00");
   });
 });
+
+describe("InputNumber edge cases", () => {
+  it("drops a pending onInput when the form resets", async () => {
+    const onInput = vi.fn();
+    const { reset } = renderInForm(() => (
+      <InputNumber label="Qty" defaultValue={3} onInput={onInput} onInputDebounceMs={50} />
+    ));
+    await userEvent.type(screen.getByLabelText("Qty"), "8");
+    await reset();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(onInput).not.toHaveBeenCalled();
+  });
+
+  it("calls bound onFocus and onBlur handlers with their data", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(() => <InputNumber label="Qty" onFocus={[onFocus, "in"]} onBlur={[onBlur, "out"]} />);
+    await userEvent.click(screen.getByLabelText("Qty"));
+    await userEvent.tab();
+    expect(onFocus).toHaveBeenCalledWith("in", expect.any(FocusEvent));
+    expect(onBlur).toHaveBeenCalledWith("out", expect.any(FocusEvent));
+  });
+});

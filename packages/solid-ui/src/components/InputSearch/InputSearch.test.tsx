@@ -73,3 +73,29 @@ describe("InputSearch", () => {
     expect(screen.queryByRole("button", { name: "Clear search" })).toBeNull();
   });
 });
+
+describe("InputSearch edge cases", () => {
+  it("drops a queued search and aborts a running one when the form resets", async () => {
+    const onSearch = vi.fn();
+    const { reset } = renderInForm(() => (
+      <InputSearch label="Search" onSearch={onSearch} onSearchDebounceMs={50} />
+    ));
+    const input = screen.getByLabelText("Search");
+    await userEvent.type(input, "ceb{Enter}");
+    const signal = onSearch.mock.lastCall![1] as AbortSignal;
+    await userEvent.type(input, "u");
+    onSearch.mockClear();
+
+    await reset();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(signal.aborted).toBe(true);
+    expect(onSearch).not.toHaveBeenCalled();
+  });
+
+  it("calls a bound onKeyDown handler with its data", async () => {
+    const onKeyDown = vi.fn();
+    renderInForm(() => <InputSearch label="Search" onKeyDown={[onKeyDown, "row-1"]} />);
+    await userEvent.type(screen.getByLabelText("Search"), "a");
+    expect(onKeyDown).toHaveBeenCalledWith("row-1", expect.any(KeyboardEvent));
+  });
+});

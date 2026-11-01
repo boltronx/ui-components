@@ -54,3 +54,25 @@ describe("Avatar", () => {
     expect(eve.style.backgroundImage).toBe("");
   });
 });
+
+describe("getInitials across engines", () => {
+  it("keeps flags, skin tones, tag flags and boxed digits whole", () => {
+    expect(getInitials("🇵🇭 Manila")).toBe("🇵🇭M");
+    expect(getInitials("👍🏽 Thumbs")).toBe("👍🏽T");
+    const england = "🏴󠁧󠁢󠁥󠁮󠁧󠁿";
+    expect(getInitials(`${england} England`)).toBe(`${england}E`);
+    expect(getInitials("1\uFE0F\u20E3 One")).toBe("1\uFE0F\u20E3O");
+  });
+
+  it("gives the same initials where Intl.Segmenter is missing, as in Firefox before 125", () => {
+    const names = ["🇵🇭 Manila", "👩\u200D💻 Dev", "👍🏽 Thumbs"];
+    const before = names.map(name => getInitials(name));
+    const original = Intl.Segmenter;
+    Object.defineProperty(Intl, "Segmenter", { value: undefined, configurable: true });
+    try {
+      expect(names.map(name => getInitials(name))).toEqual(before);
+    } finally {
+      Object.defineProperty(Intl, "Segmenter", { value: original, configurable: true });
+    }
+  });
+});

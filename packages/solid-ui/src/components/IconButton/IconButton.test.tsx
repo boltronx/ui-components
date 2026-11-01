@@ -83,3 +83,19 @@ describe("IconButton", () => {
     expect(visible).toHaveAttribute("data-open", "false");
   });
 });
+
+describe("IconButton tooltip and Escape", () => {
+  it("takes Escape before document listeners added earlier, e.g. an open menu's", async () => {
+    const prevented: boolean[] = [];
+    const listener = (event: KeyboardEvent) => prevented.push(event.defaultPrevented);
+    document.addEventListener("keydown", listener);
+    try {
+      render(() => <IconButton tooltip="Delete">x</IconButton>);
+      await userEvent.hover(screen.getByRole("button", { name: "Delete" }));
+      await userEvent.keyboard("{Escape}");
+      expect(prevented).toEqual([true]);
+    } finally {
+      document.removeEventListener("keydown", listener);
+    }
+  });
+});

@@ -210,6 +210,8 @@ export function InputNumber(props: InputNumberProps) {
   onFormReset(
     () => input,
     () => {
+      // Typing just before the reset would otherwise still report the old value.
+      debouncedInput.cancel();
       state.reset();
       const value = round(state.value());
       setRawText(value === null ? "" : String(value));
@@ -233,7 +235,9 @@ export function InputNumber(props: InputNumberProps) {
       const element = event.currentTarget;
       queueMicrotask(() => element.select());
     }
-    if (typeof local.onFocus === "function") local.onFocus(event);
+    const handler = local.onFocus;
+    if (typeof handler === "function") handler(event);
+    else handler?.[0](handler[1], event);
   };
 
   const handleBlur: JSX.FocusEventHandler<HTMLInputElement, FocusEvent> = event => {
@@ -244,7 +248,9 @@ export function InputNumber(props: InputNumberProps) {
       debouncedInput.now(value);
       local.onChange?.(value);
     }
-    if (typeof local.onBlur === "function") local.onBlur(event);
+    const handler = local.onBlur;
+    if (typeof handler === "function") handler(event);
+    else handler?.[0](handler[1], event);
   };
 
   const handleInput: JSX.EventHandler<HTMLInputElement, InputEvent> = event => {

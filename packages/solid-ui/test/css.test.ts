@@ -70,6 +70,7 @@ describe("component CSS", () => {
     const inline = new Set([
       "--bx-grid-min",
       "--bx-modal-offset",
+      "--bx-progress-percent",
       "--bx-flex-direction",
       ...["sm", "md", "lg", "xl"].map(breakpoint => `--bx-flex-direction-${breakpoint}`)
     ]);

@@ -1,15 +1,17 @@
 import { type BaseProps, cx, mergeStyle } from "../../utils/style";
 
-let segmenter: Intl.Segmenter | undefined;
-
 /**
- * The characters a reader sees, so an emoji, a flag or an accented letter is never cut in half;
- * `charAt` would split them into broken halves.
+ * One character as a reader sees it: a flag (🇵🇭), or a code point with the marks, skin tones and
+ * tags that join it (é, 👍🏽, 🏴󠁧󠁢󠁥󠁮󠁧󠁿), and the ZWJ emoji it begins (👩‍💻). Not Intl.Segmenter, which
+ * Firefox lacks before 125 and whose rules vary with each engine's Unicode version: the server
+ * and the browser must give the same initials, or hydration fails.
  */
+const CHARACTER =
+  /\p{Regional_Indicator}{2}|\P{M}[\p{M}\p{Emoji_Modifier}\u{E0020}-\u{E007F}]*(?:\u200D\P{M}[\p{M}\p{Emoji_Modifier}]*)*/gu;
+
+/** The characters a reader sees: `charAt` would split 𠮷 in half, and code points a flag or é. */
 function graphemes(text: string): string[] {
-  if (typeof Intl.Segmenter !== "function") return Array.from(text);
-  segmenter ??= new Intl.Segmenter();
-  return Array.from(segmenter.segment(text), part => part.segment);
+  return text.match(CHARACTER) ?? [];
 }
 
 /** Initials for a name: "Ada Lovelace" -> "AL"; one word gives its first two letters. */

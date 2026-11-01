@@ -166,7 +166,13 @@ export function MenuTarget(props: { children?: JSX.Element; class?: string; aria
   });
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (!menu) return;
+    // Only the trigger's keys, as only its clicks toggle: not SplitButton's main half.
+    const trigger = menu?.trigger();
+    const target = event.target as Element;
+    if (!menu || !trigger?.contains(target)) return;
+    // A loading (aria-disabled) Button in the target keeps focus; its keys do nothing.
+    const disabled = target.closest('[aria-disabled="true"]');
+    if (disabled && trigger.contains(disabled)) return;
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       menu.openMenu(event.key === "ArrowDown" ? "first" : "last");

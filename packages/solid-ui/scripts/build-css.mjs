@@ -13,7 +13,7 @@ const src = join(root, "src");
 const dist = join(root, "dist");
 
 // light-dark() is the newest feature the styles depend on, so its support sets the floor.
-const targets = browserslistToTargets(["chrome >= 123", "firefox >= 120", "safari >= 17.5"]);
+const targets = browserslistToTargets(["chrome 123", "firefox 120", "safari 17.5"]);
 
 /** Component stylesheets in a stable order, so builds are reproducible. */
 export function componentFiles() {

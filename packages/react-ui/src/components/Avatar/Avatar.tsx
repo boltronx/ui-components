@@ -7,7 +7,7 @@ import { type BaseProps, cx, mergeStyle } from "../../utils/style";
  * and the browser must give the same initials, or hydration fails.
  */
 const CHARACTER =
-  /\p{Regional_Indicator}{2}|\P{M}[\p{M}\p{Emoji_Modifier}\u{E0020}-\u{E007F}]*(?:‍\P{M}[\p{M}\p{Emoji_Modifier}]*)*/gu;
+  /\p{Regional_Indicator}{2}|\P{M}[\p{M}\p{Emoji_Modifier}\u{E0020}-\u{E007F}]*(?:\u200D\P{M}[\p{M}\p{Emoji_Modifier}]*)*/gu;
 
 /** The first `count` characters: charAt would split 𠮷 in half, and code points a flag or é. */
 function leading(text: string, count = 1): string {

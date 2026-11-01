@@ -44,7 +44,8 @@ export function IconButton(props: IconButtonProps) {
   const [dismissed, setDismissed] = createSignal(false);
 
   // Escape hides a showing tooltip until the pointer leaves or focus moves (WCAG 1.4.13). It is
-  // handled first, so the same Escape does not also close a modal or menu behind the button.
+  // handled in the capture phase, so the same Escape does not also close a modal or menu behind
+  // the button, whose document listeners may have been added first.
   createEffect(() => {
     if (!local.tooltip || dismissed() || !(hovered() || focused())) return;
     const dismissOnEscape = (event: KeyboardEvent) => {
@@ -52,8 +53,8 @@ export function IconButton(props: IconButtonProps) {
       event.preventDefault();
       setDismissed(true);
     };
-    document.addEventListener("keydown", dismissOnEscape);
-    onCleanup(() => document.removeEventListener("keydown", dismissOnEscape));
+    document.addEventListener("keydown", dismissOnEscape, true);
+    onCleanup(() => document.removeEventListener("keydown", dismissOnEscape, true));
   });
 
   const reset = () => {

@@ -158,10 +158,15 @@ export function ScrollArea(props: ScrollAreaProps) {
     if (viewport) updateThumbs();
   });
 
+  // Ends a thumb drag still in progress, so unmounting mid-drag leaves no document listeners.
+  let endDrag: (() => void) | undefined;
+  onCleanup(() => endDrag?.());
+
   const makeDrag = (axis: "v" | "h") => (e: MouseEvent) => {
     e.preventDefault();
     const vp = viewport;
     if (!vp) return;
+    endDrag?.();
     const start = axis === "v" ? e.clientY : e.clientX;
     const startScroll = axis === "v" ? vp.scrollTop : vp.scrollLeft;
     const totalScroll = axis === "v" ? vp.scrollHeight : vp.scrollWidth;
@@ -175,7 +180,9 @@ export function ScrollArea(props: ScrollAreaProps) {
     const onUp = () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onUp);
+      endDrag = undefined;
     };
+    endDrag = onUp;
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onUp);
   };

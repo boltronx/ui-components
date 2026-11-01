@@ -170,10 +170,12 @@ export function Select(props: SelectProps) {
   });
 
   // Focus stays on the field (or the search), so the highlighted option is announced through this.
-  const activeDescendant = () =>
+  // A memo, as Enter reads it too.
+  const activeDescendant = createMemo(() =>
     open() && !props.loading && !hint() && activeIndex() < visibleOptions().length
       ? optionId(activeIndex())
-      : undefined;
+      : undefined
+  );
 
   const showsChips = createMemo(() => isMultiple() && !props.ellipsis);
 
@@ -300,7 +302,8 @@ export function Select(props: SelectProps) {
     }
     if (event.key === "Enter") {
       event.preventDefault();
-      const option = visibleOptions()[activeIndex()];
+      // Not while loading or asking for more characters: the options are hidden then.
+      const option = activeDescendant() ? visibleOptions()[activeIndex()] : undefined;
       if (option) pick(option);
     }
   };

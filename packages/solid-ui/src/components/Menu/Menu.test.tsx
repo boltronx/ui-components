@@ -124,3 +124,30 @@ describe("Menu focus", () => {
     expect(await screen.findByRole("menuitem", { name: "Edit" })).toBeInTheDocument();
   });
 });
+
+describe("Menu target keys", () => {
+  it("opens with the arrow keys only from its trigger", async () => {
+    render(() => (
+      <Menu>
+        <MenuTarget>
+          <Button>Save</Button>
+          <Button aria-haspopup="menu" aria-label="More options">
+            v
+          </Button>
+        </MenuTarget>
+        <MenuDropdown>
+          <MenuItem label="Copy" />
+        </MenuDropdown>
+      </Menu>
+    ));
+    screen.getByRole("button", { name: "Save" }).focus();
+    await userEvent.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "More options" })).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+    screen.getByRole("button", { name: "More options" }).focus();
+    await userEvent.keyboard("{ArrowDown}");
+    expect(await screen.findByRole("menuitem", { name: "Copy" })).toBeInTheDocument();
+  });
+});

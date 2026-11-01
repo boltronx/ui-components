@@ -105,12 +105,19 @@ export function Autocomplete(props: AutocompleteProps) {
   let inputRef: HTMLInputElement | undefined;
   let dropdownRef: HTMLDivElement | undefined;
 
-  onFormReset(() => inputRef, text.reset);
   const serverSearch = createSearchCall({
     callback: () => props.onSearchChange,
     delay: () => props.onSearchChangeDebounceMs,
     minLength: () => props.onSearchChangeMinLength
   });
+  onFormReset(
+    () => inputRef,
+    () => {
+      text.reset();
+      // A search for the text typed before the reset would bring back its suggestions.
+      serverSearch.cancel();
+    }
+  );
   // Too short to search the server: the dropdown asks for more instead of showing stale options.
   const hint = createMemo(() =>
     props.onSearchChange && serverSearch.tooShort(text.value())
@@ -180,7 +187,8 @@ export function Autocomplete(props: AutocompleteProps) {
 
   const moveActive = (direction: 1 | -1) => {
     const options = visibleOptions();
-    if (!options.some(option => !option.disabled)) return;
+    // The hint replaces the options, so there is nothing to move to (and Enter to pick).
+    if (hint() || !options.some(option => !option.disabled)) return;
     // From nothing highlighted, ArrowDown lands on the first option and ArrowUp on the last.
     let next = activeIndex() < 0 && direction === -1 ? 0 : activeIndex();
     do {
@@ -191,7 +199,9 @@ export function Autocomplete(props: AutocompleteProps) {
   };
 
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = event => {
-    if (typeof props.onKeyDown === "function") props.onKeyDown(event);
+    const handler = props.onKeyDown;
+    if (typeof handler === "function") handler(event);
+    else handler?.[0](handler[1], event);
     if (event.defaultPrevented || disabled() || isReadOnly()) return;
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -213,7 +223,7 @@ export function Autocomplete(props: AutocompleteProps) {
       return;
     }
     if (event.key === "Enter" && open()) {
-      const option = visibleOptions()[activeIndex()];
+      const option = hint() ? undefined : visibleOptions()[activeIndex()];
       if (option) {
         event.preventDefault();
         submitOption(option);
@@ -267,7 +277,9 @@ export function Autocomplete(props: AutocompleteProps) {
           openDropdown();
         }}
         onFocus={event => {
-          if (typeof props.onFocus === "function") props.onFocus(event);
+          const handler = props.onFocus;
+          if (typeof handler === "function") handler(event);
+          else handler?.[0](handler[1], event);
           if (!event.defaultPrevented) openDropdown();
         }}
         onKeyDown={handleKeyDown}

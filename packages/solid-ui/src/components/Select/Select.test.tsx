@@ -218,3 +218,24 @@ describe("Select keyboard and focus", () => {
     expect(active()).toBe("Date");
   });
 });
+
+describe("Select while its options are hidden", () => {
+  it("picks nothing with Enter while asking for more characters", async () => {
+    const onChange = vi.fn();
+    renderInForm(() => (
+      <Select
+        label="Fruit"
+        options={fruits}
+        searchable
+        onSearchChange={() => {}}
+        onSearchChangeMinLength={3}
+        onChange={onChange}
+      />
+    ));
+    await userEvent.click(screen.getByRole("combobox"));
+    await userEvent.type(await screen.findByLabelText("Search options"), "ap");
+    expect(await screen.findByText("Type at least 3 characters")).toBeInTheDocument();
+    await userEvent.keyboard("{ArrowDown}{Enter}");
+    expect(onChange).not.toHaveBeenCalled();
+  });
+});

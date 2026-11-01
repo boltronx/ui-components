@@ -153,3 +153,25 @@ describe("DatePicker opening", () => {
     }
   });
 });
+
+describe("DatePicker far dates", () => {
+  it("keeps years before 1000, which Date reads as 19xx or writes without padding", () => {
+    expect(parseISODate("0099-03-09")!.getFullYear()).toBe(99);
+    expect(toISODate(parseISODate("0999-03-09")!)).toBe("0999-03-09");
+    expect(addMonths("0099-12-15", 1)).toBe("0100-01-15");
+    expect(calendarDays("0050-03-15")).toContain("0050-03-01");
+  });
+
+  it("stops paging at year 0, which is as far back as YYYY-MM-DD goes", async () => {
+    renderInForm(() => <DatePicker label="Due date" defaultValue="0000-02-15" />);
+    screen.getByLabelText("Due date").focus();
+    await userEvent.keyboard("{Enter}{PageUp}{PageUp}{PageUp}");
+    expect(screen.getByRole("dialog", { name: "Choose a date" })).toBeInTheDocument();
+    await userEvent.keyboard("{Enter}");
+    expect(screen.getByLabelText("Due date")).toHaveValue(
+      new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(
+        new Date(new Date(2000, 0, 15).setFullYear(0))
+      )
+    );
+  });
+});

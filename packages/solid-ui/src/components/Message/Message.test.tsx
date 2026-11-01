@@ -216,3 +216,24 @@ describe("message", () => {
     }
   });
 });
+
+describe("message config", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.runAllTimers();
+    vi.useRealTimers();
+  });
+
+  it("keeps its limit when config is given NaN", () => {
+    message.config({ limit: NaN });
+    try {
+      message.success("Still shown", 2);
+      expect(screen.getByText("Still shown")).toBeInTheDocument();
+    } finally {
+      message.config({ limit: 3 });
+    }
+  });
+});
