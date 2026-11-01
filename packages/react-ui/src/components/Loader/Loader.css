@@ -1,0 +1,92 @@
+.bx-Loader {
+  --bx-loader-size: 1.5rem;
+
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  color: var(--bx-primary);
+
+  &[data-size="xs"] {
+    --bx-loader-size: 1rem;
+  }
+
+  &[data-size="md"] {
+    --bx-loader-size: 2rem;
+  }
+
+  &[data-size="lg"] {
+    --bx-loader-size: 3rem;
+  }
+}
+
+.bx-Loader-oval {
+  width: var(--bx-loader-size);
+  height: var(--bx-loader-size);
+  border: 0.15em solid transparent;
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-radius: 50%;
+  animation: bx-spin 0.8s linear infinite;
+}
+
+.bx-Loader-item {
+  background: currentColor;
+  animation: bx-pulse 0.8s ease-in-out infinite;
+
+  &:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+
+  .bx-Loader[data-variant="dots"] > & {
+    width: calc(var(--bx-loader-size) / 2);
+    height: calc(var(--bx-loader-size) / 2);
+    border-radius: 50%;
+  }
+
+  .bx-Loader[data-variant="bars"] > & {
+    width: calc(var(--bx-loader-size) / 5);
+    height: var(--bx-loader-size);
+  }
+}
+
+@keyframes bx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bx-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bx-Loader-oval {
+    animation-duration: 2.5s;
+  }
+
+  .bx-Loader-item {
+    animation-duration: 2s;
+    animation-name: bx-fade;
+  }
+
+  @keyframes bx-fade {
+    50% {
+      opacity: 0.3;
+    }
+  }
+}

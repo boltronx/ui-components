@@ -1,0 +1,83 @@
+.bx-ScrollArea {
+  position: relative;
+  /* Its scrollbars layer inside the area only. */
+  isolation: isolate;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bx-ScrollArea-viewport {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  overflow: auto;
+  /* Like any scroll box: at either end, or with nothing to scroll, the page scrolls on. */
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* One axis only: the other is left to the page. */
+  &[data-scrollbars="y"] {
+    overflow-x: hidden;
+  }
+
+  &[data-scrollbars="x"] {
+    overflow-y: hidden;
+  }
+
+  /* Inset, since the root clips anything drawn outside it. */
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset var(--bx-focus-ring);
+  }
+}
+
+.bx-ScrollArea-scrollbar {
+  position: absolute;
+  z-index: 1;
+  border-radius: 4px;
+  transition: opacity 300ms ease;
+}
+
+.bx-ScrollArea-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--bx-scrollbar);
+  border-radius: 4px;
+  cursor: grab;
+  transition: background-color var(--bx-duration) ease;
+
+  [data-orientation="vertical"] > & {
+    right: 0;
+  }
+
+  [data-orientation="horizontal"] > & {
+    bottom: 0;
+  }
+
+  &:hover {
+    background: var(--bx-scrollbar-hover);
+  }
+
+  &:active {
+    cursor: grabbing;
+    background: var(--bx-scrollbar-hover);
+  }
+}
+
+/* Touch devices: overlay-style indicators */
+@media (pointer: coarse) {
+  .bx-ScrollArea-scrollbar {
+    transition-duration: 600ms;
+  }
+
+  .bx-ScrollArea-thumb,
+  .bx-ScrollArea-thumb:active {
+    cursor: default;
+  }
+}

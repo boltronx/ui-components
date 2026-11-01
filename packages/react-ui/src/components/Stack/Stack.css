@@ -1,0 +1,9 @@
+.bx-Stack {
+  display: flex;
+  flex-direction: column;
+
+  &[data-grow] > * {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+}

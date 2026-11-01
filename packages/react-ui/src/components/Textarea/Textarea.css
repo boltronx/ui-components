@@ -1,0 +1,20 @@
+.bx-Input-control.bx-Textarea {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  line-height: var(--bx-line-height);
+  scrollbar-width: thin;
+  scrollbar-color: var(--bx-scrollbar) transparent;
+}
+
+.bx-Textarea-count {
+  align-self: flex-end;
+  min-height: 1rem;
+  font-size: var(--bx-font-size-xs);
+  line-height: 1rem;
+  color: var(--bx-text-dimmed);
+  font-variant-numeric: tabular-nums;
+
+  .bx-Textarea:disabled ~ & {
+    opacity: var(--bx-disabled-opacity);
+  }
+}

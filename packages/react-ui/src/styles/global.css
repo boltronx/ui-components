@@ -1,0 +1,23 @@
+/*
+ * Page-wide defaults. Shipped in styles.css only; use components.css instead to keep your own.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--bx-font-family);
+  font-size: var(--bx-font-size-sm);
+  line-height: var(--bx-line-height);
+  color: var(--bx-text);
+  background: var(--bx-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[hidden] {
+  display: none !important;
+}

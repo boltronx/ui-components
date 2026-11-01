@@ -1,0 +1,138 @@
+.bx-Checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--bx-font-size-sm);
+  cursor: pointer;
+
+  &[data-align-start] {
+    align-items: flex-start;
+  }
+
+  /* Label first; justify-content keeps the pair at the start of the line. */
+  &[data-label-position="left"] {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+
+  &[data-readonly] {
+    cursor: default;
+
+    .bx-Checkbox-input,
+    .bx-Checkbox-label {
+      cursor: default;
+    }
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+
+    .bx-Checkbox-input,
+    .bx-Checkbox-body {
+      cursor: not-allowed;
+      opacity: var(--bx-disabled-opacity);
+    }
+
+    .bx-Checkbox-label {
+      cursor: not-allowed;
+    }
+  }
+
+  &:hover:not([data-disabled], [data-readonly]) .bx-Checkbox-label {
+    color: var(--bx-text-strong);
+  }
+}
+
+.bx-Checkbox-input {
+  position: relative;
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  appearance: none;
+  background: var(--bx-surface);
+  border: 1px solid var(--bx-border-strong);
+  border-radius: var(--bx-radius-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--bx-duration) ease,
+    border-color var(--bx-duration) ease;
+
+  /* The check mark */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.3125rem;
+    height: 0.6875rem;
+    border-right: 2px solid var(--bx-primary-contrast);
+    border-bottom: 2px solid var(--bx-primary-contrast);
+    opacity: 0;
+    transform: translate(-50%, -60%) rotate(45deg);
+    transition: opacity var(--bx-duration) ease;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--bx-focus);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  &:checked {
+    background: var(--bx-primary);
+    border-color: var(--bx-primary);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  /* A dash in place of the check mark. */
+  &:indeterminate {
+    background: var(--bx-primary);
+    border-color: var(--bx-primary);
+
+    &::before {
+      width: 0.625rem;
+      height: 0;
+      border-right: 0;
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.bx-Checkbox-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.bx-Checkbox-label {
+  cursor: pointer;
+  transition: color var(--bx-duration) ease;
+}
+
+.bx-Checkbox-description {
+  margin: 0;
+  font-size: var(--bx-font-size-xs);
+  color: var(--bx-text-dimmed);
+}
+
+.bx-Checkbox-error {
+  margin: 0;
+  font-size: var(--bx-font-size-xs);
+  color: var(--bx-danger);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.bx-Checkbox-input[aria-invalid="true"] {
+  border-color: var(--bx-danger);
+}

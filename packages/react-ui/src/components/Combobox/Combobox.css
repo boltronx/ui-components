@@ -1,0 +1,81 @@
+/* The dropdown shared by Select and Autocomplete */
+.bx-Combobox-search {
+  margin-bottom: 0.35rem;
+
+  .bx-Input-control {
+    background: var(--bx-surface-hover);
+  }
+}
+
+.bx-Combobox-viewport {
+  max-height: 18rem;
+  /* Like a native select's list: scrolling past its end doesn't move the page under it. */
+  overscroll-behavior: contain;
+}
+
+.bx-Combobox-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.bx-Combobox-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--bx-spacing-md);
+  min-height: 2.25rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--bx-radius-sm);
+  cursor: pointer;
+
+  &[data-active]:not([data-disabled]) {
+    background: var(--bx-surface-hover);
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--bx-disabled-opacity);
+  }
+}
+
+.bx-Combobox-optionBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bx-Combobox-optionLabel {
+  overflow-wrap: anywhere;
+}
+
+.bx-Combobox-optionDescription {
+  margin-top: 0.15rem;
+  font-size: var(--bx-font-size-xs);
+  color: var(--bx-text-dimmed);
+}
+
+.bx-Combobox-check {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  color: var(--bx-primary);
+
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.bx-Combobox-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bx-spacing-sm);
+  min-height: 3.25rem;
+  color: var(--bx-text-dimmed);
+}
+
+.bx-Combobox-state:empty {
+  display: none;
+}

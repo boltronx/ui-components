@@ -1,0 +1,219 @@
+.bx-Modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--bx-z-modal);
+  pointer-events: none;
+}
+
+.bx-Modal-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--bx-spacing-md);
+  pointer-events: auto;
+
+  &[data-placement="top"] {
+    align-items: flex-start;
+    padding-top: var(--bx-modal-offset, var(--bx-spacing-md));
+  }
+
+  &[data-placement="bottom"] {
+    align-items: flex-end;
+    padding-bottom: var(--bx-modal-offset, var(--bx-spacing-md));
+  }
+
+  @media (max-width: 36rem) {
+    padding: var(--bx-spacing-sm);
+  }
+}
+
+.bx-Modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--bx-overlay);
+  animation: bx-modal-fade-in 180ms ease forwards;
+
+  [data-exiting] > & {
+    animation: bx-modal-fade-out 180ms ease forwards;
+  }
+}
+
+.bx-Modal-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(32rem, 100%);
+  max-height: min(80dvh, 42rem);
+  font-size: var(--bx-font-size-sm);
+  color: var(--bx-text);
+  background: var(--bx-surface);
+  border: 1px solid var(--bx-border);
+  border-radius: var(--bx-radius-md);
+  outline: none;
+  box-shadow: var(--bx-shadow-md);
+  animation: bx-modal-zoom-in 220ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  [data-exiting] > & {
+    animation: bx-modal-zoom-out 220ms ease forwards;
+  }
+
+  [data-placement="top"] > & {
+    animation-name: bx-modal-slide-down;
+  }
+
+  [data-placement="top"][data-exiting] > & {
+    animation-name: bx-modal-slide-up-out;
+  }
+
+  [data-placement="bottom"] > & {
+    animation-name: bx-modal-slide-up;
+  }
+
+  [data-placement="bottom"][data-exiting] > & {
+    animation-name: bx-modal-slide-down-out;
+  }
+
+  @media (max-width: 36rem) {
+    max-height: calc(100dvh - 2 * var(--bx-spacing-sm));
+  }
+}
+
+.bx-Modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-bottom: 1px solid var(--bx-border);
+}
+
+.bx-Modal-title {
+  margin: 0;
+  font-size: var(--bx-font-size-md);
+  font-weight: 700;
+  color: var(--bx-text-strong);
+}
+
+.bx-Modal-close {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--bx-control-height);
+  height: var(--bx-control-height);
+  margin-left: auto;
+  padding: 0;
+  color: var(--bx-text);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bx-radius-sm);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--bx-surface-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--bx-disabled-opacity);
+  }
+
+  > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.bx-Modal-body {
+  flex: 1 1 auto;
+}
+
+.bx-Modal-viewport {
+  padding: 0.875rem;
+}
+
+.bx-Modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--bx-spacing-sm);
+  padding: 0.75rem 0.875rem;
+  border-top: 1px solid var(--bx-border);
+}
+
+@keyframes bx-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes bx-modal-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes bx-modal-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes bx-modal-zoom-out {
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes bx-modal-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes bx-modal-slide-up-out {
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes bx-modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+@keyframes bx-modal-slide-down-out {
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bx-Modal-card {
+    animation-duration: 150ms !important;
+    animation-name: bx-modal-fade-in !important;
+
+    [data-exiting] > & {
+      animation-name: bx-modal-fade-out !important;
+    }
+  }
+
+  .bx-Modal-overlay {
+    animation-duration: 50ms !important;
+  }
+}

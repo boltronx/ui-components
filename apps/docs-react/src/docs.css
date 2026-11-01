@@ -1,0 +1,174 @@
+/*
+ * Page layout for the docs site only. Everything inside the pages is built from library
+ * components, so what you see is what the library ships.
+ */
+:root {
+  --docs-header-height: 3.5rem;
+  --docs-sidebar-width: 16rem;
+}
+
+.docs-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--bx-spacing-sm);
+  height: var(--docs-header-height);
+  padding: 0 var(--bx-spacing-md);
+  background: color-mix(in oklab, var(--bx-surface), transparent 15%);
+  border-bottom: 1px solid var(--bx-border);
+  backdrop-filter: blur(8px);
+}
+
+.docs-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--bx-spacing-sm);
+  font-size: var(--bx-font-size-md);
+  font-weight: 700;
+  color: var(--bx-text-strong);
+  text-decoration: none;
+}
+
+.docs-logo {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--bx-primary);
+  border-radius: var(--bx-radius-lg);
+}
+
+.docs-spacer {
+  flex: 1;
+}
+
+.docs-sidebar {
+  position: fixed;
+  top: var(--docs-header-height);
+  bottom: 0;
+  left: 0;
+  z-index: 15;
+  width: var(--docs-sidebar-width);
+  background: var(--bx-body);
+  border-right: 1px solid var(--bx-border);
+}
+
+.docs-sidebar-scroll {
+  height: 100%;
+}
+
+.docs-sidebar-viewport {
+  padding: var(--bx-spacing-md) var(--bx-spacing-sm);
+}
+
+.docs-nav-heading {
+  margin: var(--bx-spacing-md) 0 var(--bx-spacing-xs) var(--bx-spacing-md);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.docs-sidebar .bx-Navlink {
+  padding: 0.5rem 1rem;
+}
+
+.docs-main {
+  margin-left: var(--docs-sidebar-width);
+  padding: var(--bx-spacing-xl) var(--bx-spacing-xl) 4rem;
+}
+
+.docs-burger,
+.docs-overlay {
+  display: none;
+}
+
+/* Phones and small tablets: the sidebar becomes a drawer */
+@media (max-width: 48rem) {
+  .docs-burger {
+    display: inline-flex;
+  }
+
+  .docs-header {
+    padding: 0 var(--bx-spacing-sm);
+  }
+
+  .docs-sidebar {
+    width: min(18rem, 85vw);
+    box-shadow: var(--bx-shadow-md);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform 200ms ease,
+      visibility 0s linear 200ms;
+  }
+
+  .docs-overlay {
+    position: fixed;
+    inset: var(--docs-header-height) 0 0;
+    z-index: 14;
+    display: block;
+    background: var(--bx-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+
+  [data-nav-open] {
+    .docs-sidebar {
+      transform: none;
+      visibility: visible;
+      transition: transform 200ms ease;
+    }
+
+    .docs-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .docs-main {
+    margin-left: 0;
+    padding: var(--bx-spacing-lg) var(--bx-spacing-md) 3rem;
+  }
+}
+
+.docs-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bx-spacing-sm);
+  scroll-margin-top: calc(var(--docs-header-height) + var(--bx-spacing-md));
+}
+
+.docs-demo-card {
+  overflow: hidden;
+}
+
+.docs-demo-preview {
+  padding: var(--bx-spacing-lg);
+  overflow-x: auto;
+
+  @media (max-width: 48rem) {
+    padding: var(--bx-spacing-md);
+  }
+}
+
+.docs-demo-toolbar {
+  padding: var(--bx-spacing-xs);
+  border-top: 1px solid var(--bx-border);
+}
+
+.bx-Code.docs-demo-code {
+  max-height: 28rem;
+  border-width: 1px 0 0;
+  border-radius: 0;
+}
+
+.docs-swatch {
+  width: 100%;
+  height: 2.5rem;
+  border: 1px solid var(--bx-border);
+  border-radius: var(--bx-radius-md);
+}
