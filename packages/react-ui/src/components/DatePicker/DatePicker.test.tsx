@@ -164,7 +164,8 @@ describe("DatePicker robustness", () => {
     screen.getByLabelText("Due date").focus();
     await userEvent.keyboard("{Enter}");
     await userEvent.keyboard("{Shift>}{PageUp}{PageUp}{PageUp}{PageUp}{PageUp}{/Shift}");
-    expect(screen.getByRole("dialog", { name: "Choose a date" })).toBeInTheDocument();
+    // findBy: the panel shows once positioned, on the next animation frame.
+    expect(await screen.findByRole("dialog", { name: "Choose a date" })).toBeInTheDocument();
     await userEvent.keyboard("{Enter}");
     expect(screen.getByLabelText("Due date")).toHaveValue(
       new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(

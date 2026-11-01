@@ -1,0 +1,129 @@
+<!doctype html>
+<!-- The site root on GitHub Pages: the docs live under react/ and solid/ (see .github/workflows/pages.yml).
+     Links are relative, so they work under the repository's base path. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Simple, themeable React and SolidJS components that work with plain HTML forms and server rendering."
+    />
+    <title>BoltronX UI Components</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: light-dark(#f8fafc, #0b1020);
+        --surface: light-dark(#ffffff, #141a33);
+        --text: light-dark(#1e293b, #cbd5e1);
+        --dimmed: light-dark(#64748b, #94a3b8);
+        --border: light-dark(#e2e8f0, #272f54);
+        --primary: light-dark(#7950f2, #9775fa);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1rem;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      main {
+        width: 100%;
+        max-width: 44rem;
+      }
+
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        line-height: 1.2;
+      }
+
+      p {
+        margin: 0 0 2rem;
+        color: var(--dimmed);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        display: block;
+        padding: 1.25rem;
+        color: inherit;
+        text-decoration: none;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        transition: border-color 140ms ease;
+      }
+
+      .card:hover,
+      .card:focus-visible {
+        border-color: var(--primary);
+      }
+
+      .card:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+      }
+
+      .card strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 1.125rem;
+        color: var(--primary);
+      }
+
+      .card span {
+        color: var(--dimmed);
+      }
+
+      footer {
+        margin-top: 2rem;
+        font-size: 0.875rem;
+        color: var(--dimmed);
+      }
+
+      footer a {
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>BoltronX UI Components</h1>
+      <p>
+        Simple, themeable components for React and SolidJS that work with plain HTML forms and
+        server rendering, from one repository and one set of styles.
+      </p>
+      <div class="cards">
+        <a class="card" href="react/">
+          <strong>React docs</strong>
+          <span>@boltronx/react-ui: React 19, Next.js (Server Components and SSR)</span>
+        </a>
+        <a class="card" href="solid/">
+          <strong>Solid docs</strong>
+          <span>@boltronx/solid-ui: SolidJS, SolidStart (SSR and server actions)</span>
+        </a>
+      </div>
+      <footer>
+        <a href="https://github.com/boltronx/ui-components">GitHub</a> ·
+        <a href="https://www.npmjs.com/package/@boltronx/react-ui">npm (React)</a> ·
+        <a href="https://www.npmjs.com/package/@boltronx/solid-ui">npm (Solid)</a> · MIT license
+      </footer>
+    </main>
+  </body>
+</html>
