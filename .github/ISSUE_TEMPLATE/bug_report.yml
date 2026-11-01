@@ -1,0 +1,32 @@
+name: Bug report
+description: Something doesn't work as documented.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: A minimal code sample, or a link to a repository or StackBlitz.
+      render: tsx
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "Package and framework versions: @boltronx/react-ui with react (and Next.js), or @boltronx/solid-ui with solid-js (and SolidStart)"
+      placeholder: "@boltronx/react-ui 0.2.0, react 19.3.1, next 16.4.3"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: Chrome 140 on Android 15

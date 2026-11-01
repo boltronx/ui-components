@@ -1,0 +1,217 @@
+name: Release
+
+# Publishes @boltronx/react-ui and @boltronx/solid-ui to npm; see CONTRIBUTING.md for setup.
+#  - Automatic: merge a change to packages/<name>/package.json that sets a new version. Every
+#    package whose version isn't on npm yet is released.
+#  - Manual: run this workflow from the Actions tab for one package, optionally with a bump.
+# Tags and GitHub releases are per package (react-ui@v1.2.0, solid-ui@v1.2.0). Every step is
+# idempotent, so re-running a failed release finishes it without duplicating work.
+on:
+  push:
+    branches: [main]
+    paths: [packages/react-ui/package.json, packages/solid-ui/package.json]
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Package to release
+        type: choice
+        options: [react-ui, solid-ui]
+      version:
+        description: >-
+          Bump: patch, minor, major, prepatch, preminor, premajor, prerelease, or an exact version
+          like 1.2.0. Leave empty to publish the version already in package.json.
+        type: string
+        default: ""
+      dist-tag:
+        description: npm dist-tag. "auto" means latest for releases, next for prereleases.
+        type: choice
+        options: [auto, latest, next, beta]
+        default: auto
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: Check for new versions
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      packages: ${{ steps.plan.outputs.packages }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Decide
+        id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          PACKAGE_INPUT: ${{ inputs.package }}
+        run: |
+          # A manual run always continues: it may bump, or finish a release that failed halfway.
+          if [[ "$EVENT" == "workflow_dispatch" ]]; then
+            case "$PACKAGE_INPUT" in
+              react-ui | solid-ui) echo "packages=[\"$PACKAGE_INPUT\"]" >> "$GITHUB_OUTPUT" ;;
+              *) echo "::error::Unknown package: $PACKAGE_INPUT"; exit 1 ;;
+            esac
+            exit 0
+          fi
+          packages=()
+          for name in react-ui solid-ui; do
+            version=$(node -p "require('./packages/$name/package.json').version")
+            if npm view "@boltronx/$name@$version" version >/dev/null 2>&1; then
+              echo "::notice::@boltronx/$name v$version is already on npm."
+            else
+              packages+=("\"$name\"")
+            fi
+          done
+          echo "packages=[$(IFS=,; echo "${packages[*]}")]" >> "$GITHUB_OUTPUT"
+
+  check:
+    name: Checks
+    needs: plan
+    if: needs.plan.outputs.packages != '[]'
+    uses: $/.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  release:
+    name: Publish ${{ matrix.package }}
+    needs: [plan, check]
+    if: needs.plan.outputs.packages != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      # One at a time, so two releases never push to main or tag at once
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.plan.outputs.packages) }}
+    # Configure required reviewers on this environment to approve each release.
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@boltronx/${{ matrix.package }}
+    permissions:
+      # Push the version commit and tag, create the GitHub release
+      contents: write
+      # npm trusted publishing (no npm token) and provenance
+      id-token: write
+    env:
+      PACKAGE: ${{ matrix.package }}
+      VERSION_INPUT: ${{ inputs.version }}
+      DIST_TAG_INPUT: ${{ inputs.dist-tag }}
+      GH_TOKEN: ${{ github.token }}
+    defaults:
+      run:
+        working-directory: packages/${{ matrix.package }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      # No dependency cache: a release never restores state another run wrote.
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Bump version
+        if: inputs.version != ''
+        run: |
+          pattern='^(patch|minor|major|prepatch|preminor|premajor|prerelease|[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?)$'
+          if [[ ! "$VERSION_INPUT" =~ $pattern ]]; then
+            echo "::error::Not a valid version or bump: $VERSION_INPUT"
+            exit 1
+          fi
+          preid=next
+          [[ "$DIST_TAG_INPUT" == "beta" ]] && preid=beta
+          npm version "$VERSION_INPUT" --no-git-tag-version --preid "$preid"
+
+      - name: Resolve version and dist-tag
+        id: meta
+        run: |
+          version=$(node -p "require('./package.json').version")
+          prerelease=false
+          [[ "$version" == *-* ]] && prerelease=true
+          tag="${DIST_TAG_INPUT:-auto}"
+          if [[ "$tag" == "auto" ]]; then
+            if [[ "$prerelease" == "true" ]]; then tag=next; else tag=latest; fi
+          fi
+          if [[ "$prerelease" == "true" && "$tag" == "latest" ]]; then
+            echo "::error::Prerelease $version can't be published as latest."
+            exit 1
+          fi
+          published=false
+          npm view "@boltronx/$PACKAGE@$version" version >/dev/null 2>&1 && published=true
+          {
+            echo "version=$version"
+            echo "tag=$tag"
+            echo "prerelease=$prerelease"
+            echo "published=$published"
+          } >> "$GITHUB_OUTPUT"
+          echo "::notice::Releasing @boltronx/$PACKAGE v$version as '$tag' (already on npm: $published)"
+
+      - name: Build
+        run: pnpm build
+
+      - name: Push version commit and tag
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          BUMPED: ${{ inputs.version != '' }}
+        run: |
+          remote="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          tag="$PACKAGE@v$VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ "$BUMPED" == "true" ]]; then
+            git commit --all --message "chore(release): $PACKAGE v$VERSION"
+            git push "$remote" HEAD:main
+          fi
+          if git ls-remote --exit-code --tags "$remote" "refs/tags/$tag" >/dev/null; then
+            echo "Tag $tag already exists."
+          else
+            git tag --annotate "$tag" --message "@boltronx/$PACKAGE v$VERSION"
+            git push "$remote" "$tag"
+          fi
+
+      - name: Publish to npm
+        if: steps.meta.outputs.published == 'false'
+        env:
+          TAG: ${{ steps.meta.outputs.tag }}
+        # Trusted publishing needs npm 11.5.1 or later, which Node 24 ships.
+        run: npm publish --access public --provenance --tag "$TAG"
+
+      - name: Create GitHub release
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          PRERELEASE: ${{ steps.meta.outputs.prerelease }}
+        run: |
+          tag="$PACKAGE@v$VERSION"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists."
+            exit 0
+          fi
+          # Notes start from this package's previous release, not the other package's.
+          remote="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          previous=$(git ls-remote --tags --refs "$remote" "refs/tags/$PACKAGE@v*" |
+            sed 's|.*refs/tags/||' | grep -vxF "$tag" | sort -V | tail -n 1 || true)
+          flags=()
+          [[ -n "$previous" ]] && flags+=(--notes-start-tag "$previous")
+          [[ "$PRERELEASE" == "true" ]] && flags+=(--prerelease)
+          gh release create "$tag" --title "@boltronx/$PACKAGE v$VERSION" --generate-notes \
+            --verify-tag "${flags[@]}"

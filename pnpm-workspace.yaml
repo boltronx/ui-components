@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+  - apps/*
+
+# Supply-chain hardening: only install versions that have been public for at least 3 days, so a
+# hijacked release is usually caught and unpublished before it reaches this repo.
+minimumReleaseAge: 4320
+
+# Dependencies allowed to run install scripts.
+allowBuilds:
+  esbuild: true

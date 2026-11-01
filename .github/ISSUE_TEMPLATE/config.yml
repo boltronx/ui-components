@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/boltronx/ui-components/security/advisories/new
+    about: Report security issues privately, not as a public issue.
+  - name: Documentation
+    url: https://boltronx.github.io/ui-components/
+    about: Guides and live examples for every component.

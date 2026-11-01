@@ -1,0 +1,32 @@
+node_modules
+dist
+coverage
+*.tsbuildinfo
+*.tgz
+
+# Copied in from the repo root by `prepack`
+packages/react-ui/LICENSE
+packages/solid-ui/LICENSE
+
+# Environment
+.env
+.env*.local
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Next.js
+.next
+next-env.d.ts
+
+# SolidStart
+.vinxi
+.output

@@ -1,0 +1,6 @@
+dist
+.next
+.vinxi
+.output
+coverage
+pnpm-lock.yaml

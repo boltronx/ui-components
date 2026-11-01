@@ -1,0 +1,53 @@
+{
+  "name": "ui-components-workspace",
+  "private": true,
+  "type": "module",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.22.2",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.17.0",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=24.22.2",
+    "pnpm": ">=12.17.0"
+  },
+  "scripts": {
+    "dev:react": "pnpm --filter @boltronx/react-ui build && pnpm --parallel --filter @boltronx/react-ui --filter docs-react dev",
+    "dev:solid": "pnpm --filter @boltronx/solid-ui build && pnpm --parallel --filter @boltronx/solid-ui --filter docs-solid dev",
+    "dev:next": "pnpm --filter @boltronx/react-ui build && pnpm --parallel --filter @boltronx/react-ui --filter next-fixture dev",
+    "dev:start": "pnpm --filter @boltronx/solid-ui build && pnpm --parallel --filter @boltronx/solid-ui --filter start-fixture dev",
+    "build": "pnpm --filter \"./packages/*\" build && pnpm --filter docs-react --filter docs-solid build",
+    "test": "pnpm --filter \"./packages/*\" test && pnpm --filter docs-react test",
+    "test:coverage": "pnpm --filter \"./packages/*\" test:coverage",
+    "test:fixtures": "pnpm --filter next-fixture --filter start-fixture build && pnpm --filter next-fixture --filter start-fixture test",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "lint:package": "pnpm --filter \"./packages/*\" lint:package",
+    "typecheck": "pnpm --recursive typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "spellcheck": "cspell . --no-progress --gitignore",
+    "check": "pnpm format:check && pnpm spellcheck && pnpm lint && pnpm build && pnpm typecheck && pnpm test && pnpm test:fixtures && pnpm lint:package",
+    "update-deps": "pnpm up -r -Li"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "cspell": "^10.4.0",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "eslint-plugin-solid": "^0.18.1",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}
