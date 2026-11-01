@@ -48,7 +48,10 @@ export function InputSearch(props: InputSearchProps) {
 
   onFormReset(
     () => input,
-    () => afterFormReset(() => setHasValue((input?.value.length ?? 0) > 0))
+    () => {
+      search.cancel();
+      afterFormReset(() => setHasValue((input?.value.length ?? 0) > 0));
+    }
   );
 
   const clear = () => {
