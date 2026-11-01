@@ -282,7 +282,8 @@ export function Select(props: SelectProps) {
     }
     if (event.key === "Enter") {
       event.preventDefault();
-      const option = visibleOptions[activeIndex];
+      // Not while loading or asking for more characters: the options are hidden then.
+      const option = activeDescendant ? visibleOptions[activeIndex] : undefined;
       if (option) pick(option);
     }
   };

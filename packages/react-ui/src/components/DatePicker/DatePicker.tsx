@@ -212,8 +212,13 @@ export function DatePicker(props: DatePickerProps) {
     setLevel(level === "decade" ? "year" : "month");
   };
 
+  /** Moves the calendar to `iso`, unless that is past year 0 or 9999, which YYYY-MM-DD can't hold. */
+  const moveTo = (iso: string) => {
+    if (parseISODate(iso)) setActive(iso);
+  };
+
   const moveActive = (steps: number) => {
-    setActive(
+    moveTo(
       level === "month"
         ? addDays(active, steps)
         : addMonths(active, level === "year" ? steps : steps * 12)
@@ -227,7 +232,7 @@ export function DatePicker(props: DatePickerProps) {
   const page = (direction: -1 | 1, long = false) => {
     const months = { month: 1, year: 12, decade: 120 }[level];
     const factor = long ? (level === "month" ? 12 : 10) : 1;
-    setActive(addMonths(active, direction * months * factor));
+    moveTo(addMonths(active, direction * months * factor));
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -472,10 +477,12 @@ export function DatePicker(props: DatePickerProps) {
                   type="button"
                   className="bx-DatePicker-cell"
                   tabIndex={-1}
-                  aria-pressed={String(year) === value.slice(0, 4)}
+                  aria-pressed={String(year).padStart(4, "0") === value.slice(0, 4)}
                   data-active={year === activeYear ? "" : undefined}
                   disabled={yearOutOfRange(year)}
-                  onClick={() => drillDown(`${year}${active.slice(4, 7)}-01`)}
+                  onClick={() =>
+                    drillDown(`${String(year).padStart(4, "0")}${active.slice(4, 7)}-01`)
+                  }
                 >
                   {year}
                 </button>

@@ -203,6 +203,8 @@ export function InputNumber({
   const inputRef = useMergedRefs(input, ref);
   const debouncedInput = useDebouncedCall(onInput, onInputDebounceMs ?? 400);
   useFormReset(input, () => {
+    // Typing just before the reset would otherwise still report the old value.
+    debouncedInput.cancel();
     state.reset();
     const next = round(state.isControlled ? state.value : (defaultValue ?? null));
     setRawText(next === null ? "" : String(next));

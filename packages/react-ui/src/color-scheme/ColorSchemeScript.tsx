@@ -16,5 +16,10 @@ export interface ColorSchemeScriptProps extends Omit<ColorSchemeOptions, "key"> 
  *     <head><ColorSchemeScript /></head>
  */
 export function ColorSchemeScript({ nonce, storageKey, ...options }: ColorSchemeScriptProps) {
-  return <script nonce={nonce} dangerouslySetInnerHTML={{ __html: colorSchemeScript({ ...options, key: storageKey }) }} />;
+  return (
+    <script
+      nonce={nonce}
+      dangerouslySetInnerHTML={{ __html: colorSchemeScript({ ...options, key: storageKey }) }}
+    />
+  );
 }

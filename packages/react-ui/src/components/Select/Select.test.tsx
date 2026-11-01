@@ -123,6 +123,25 @@ describe("Select", () => {
     expect(form.checkValidity()).toBe(true);
   });
 
+  it("picks nothing with Enter while asking for more characters", async () => {
+    const onChange = vi.fn();
+    renderInForm(
+      <Select
+        label="Fruit"
+        options={fruits}
+        searchable
+        onSearchChange={() => {}}
+        onSearchChangeMinLength={3}
+        onChange={onChange}
+      />
+    );
+    await userEvent.click(screen.getByRole("combobox"));
+    await userEvent.type(await screen.findByLabelText("Search options"), "ap");
+    expect(await screen.findByText("Type at least 3 characters")).toBeInTheDocument();
+    await userEvent.keyboard("{ArrowDown}{Enter}");
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("opens with the keyboard and picks with Enter", async () => {
     const { data } = renderInForm(<Select label="Fruit" name="fruit" options={fruits} />);
     screen.getByRole("combobox").focus();

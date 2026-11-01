@@ -30,13 +30,11 @@ export default function Demo() {
   const [requests, setRequests] = useState(0);
 
   const search = (query: string, signal: AbortSignal) => {
-    if (!query) {
-      setLoading(false);
-      return setResults([]);
-    }
+    if (!query) return setResults([]);
     setRequests(count => count + 1);
     setLoading(true);
-    signal.addEventListener("abort", () => setLoading(false), { once: true });
+    // Clearing the field, or typing below the minimum length, aborts without a new search.
+    signal.addEventListener("abort", () => setLoading(false));
     searchFruits(query, signal)
       .then(setResults)
       .catch(() => {})

@@ -52,6 +52,38 @@ describe("Autocomplete", () => {
     expect(data().get("city")).toBe("Cebu");
   });
 
+  it("picks nothing with the keyboard while asking for more characters", async () => {
+    const { data } = renderInForm(
+      <Autocomplete
+        label="City"
+        name="city"
+        options={cities}
+        onSearchChange={() => {}}
+        onSearchChangeMinLength={3}
+      />
+    );
+    await userEvent.type(screen.getByLabelText("City"), "ce");
+    expect(await screen.findByText("Type at least 3 characters")).toBeInTheDocument();
+    await userEvent.keyboard("{ArrowDown}{Enter}");
+    expect(data().get("city")).toBe("ce");
+  });
+
+  it("drops a pending server search when the form resets", async () => {
+    const onSearchChange = vi.fn();
+    const { reset } = renderInForm(
+      <Autocomplete
+        label="City"
+        options={cities}
+        onSearchChange={onSearchChange}
+        onSearchChangeDebounceMs={50}
+      />
+    );
+    await userEvent.type(screen.getByLabelText("City"), "ceb");
+    await reset();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(onSearchChange).not.toHaveBeenCalled();
+  });
+
   it("doesn't open or pick inside a ReadOnlyProvider", async () => {
     const { data } = renderInForm(
       <ReadOnlyProvider readOnly>

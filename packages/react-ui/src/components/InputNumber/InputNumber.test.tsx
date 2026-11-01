@@ -65,6 +65,17 @@ describe("InputNumber", () => {
     expect(input).toHaveValue("3");
   });
 
+  it("drops a pending onInput when the form resets", async () => {
+    const onInput = vi.fn();
+    const { reset } = renderInForm(
+      <InputNumber label="Qty" defaultValue={3} onInput={onInput} onInputDebounceMs={50} />
+    );
+    await userEvent.type(screen.getByLabelText("Qty"), "8");
+    await reset();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(onInput).not.toHaveBeenCalled();
+  });
+
   it("never turns a decimal comma into a larger number", async () => {
     const onChange = vi.fn();
     const { data } = renderInForm(<InputNumber label="Qty" name="qty" onChange={onChange} />);

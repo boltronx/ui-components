@@ -103,11 +103,15 @@ export function Autocomplete({
   const inputRef = useMergedRefs(input, ref);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  useFormReset(input, text.reset);
   const serverSearch = useSearchCall({
     callback: onSearchChange,
     delay: onSearchChangeDebounceMs,
     minLength: onSearchChangeMinLength
+  });
+  useFormReset(input, () => {
+    text.reset();
+    // A search for the text typed before the reset would bring back its suggestions.
+    serverSearch.cancel();
   });
   // Too short to search the server: the dropdown asks for more instead of showing stale options.
   const hint =
@@ -181,7 +185,8 @@ export function Autocomplete({
   };
 
   const moveActive = (direction: 1 | -1) => {
-    if (!visibleOptions.some(option => !option.disabled)) return;
+    // The hint replaces the options, so there is nothing to move to (and Enter to pick).
+    if (hint || !visibleOptions.some(option => !option.disabled)) return;
     // From nothing highlighted, ArrowDown lands on the first option and ArrowUp on the last.
     let next = activeIndex < 0 && direction === -1 ? 0 : activeIndex;
     do {
@@ -211,7 +216,7 @@ export function Autocomplete({
       return;
     }
     if (event.key === "Enter" && open) {
-      const option = visibleOptions[activeIndex];
+      const option = hint ? undefined : visibleOptions[activeIndex];
       if (option) {
         event.preventDefault();
         submitOption(option);

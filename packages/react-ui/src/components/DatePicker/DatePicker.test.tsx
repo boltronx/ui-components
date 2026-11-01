@@ -14,6 +14,13 @@ describe("date helpers", () => {
     expect(parseISODate("not a date")).toBeUndefined();
   });
 
+  it("keeps years before 1000, which Date reads as 19xx or writes without padding", () => {
+    expect(parseISODate("0099-03-09")!.getFullYear()).toBe(99);
+    expect(toISODate(parseISODate("0999-03-09")!)).toBe("0999-03-09");
+    expect(addMonths("0099-12-15", 1)).toBe("0100-01-15");
+    expect(calendarDays("0050-03-15")).toContain("0050-03-01");
+  });
+
   it("keeps the day within the month when moving months", () => {
     expect(addMonths("2026-01-31", 1)).toBe("2026-02-28");
   });
@@ -150,6 +157,20 @@ describe("DatePicker robustness", () => {
     expect(screen.getByRole("button", { name: "April 2025" })).toBeInTheDocument();
     await userEvent.keyboard("{Shift>}{PageDown}{/Shift}");
     expect(screen.getByRole("button", { name: "April 2026" })).toBeInTheDocument();
+  });
+
+  it("stops paging at year 0, which is as far back as YYYY-MM-DD goes", async () => {
+    renderInForm(<DatePicker label="Due date" defaultValue="0003-03-15" />);
+    screen.getByLabelText("Due date").focus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{Shift>}{PageUp}{PageUp}{PageUp}{PageUp}{PageUp}{/Shift}");
+    expect(screen.getByRole("dialog", { name: "Choose a date" })).toBeInTheDocument();
+    await userEvent.keyboard("{Enter}");
+    expect(screen.getByLabelText("Due date")).toHaveValue(
+      new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(
+        new Date(new Date(2000, 2, 15).setFullYear(0))
+      )
+    );
   });
 
   it("doesn't rebuild its formatters for an inline format of the same content", () => {

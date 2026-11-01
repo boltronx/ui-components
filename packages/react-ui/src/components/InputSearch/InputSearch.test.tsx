@@ -45,6 +45,24 @@ describe("InputSearch", () => {
     expect(screen.queryByRole("button", { name: "Clear search" })).toBeNull();
   });
 
+  it("drops a queued search and aborts a running one when the form resets", async () => {
+    const onSearch = vi.fn();
+    const { reset } = renderInForm(
+      <InputSearch label="Search" onSearch={onSearch} onSearchDebounceMs={50} />
+    );
+    const input = screen.getByLabelText("Search");
+    fireEvent.change(input, { target: { value: "ceb" } });
+    fireEvent.keyDown(input, { key: "Enter" });
+    const signal = onSearch.mock.lastCall![1] as AbortSignal;
+    fireEvent.change(input, { target: { value: "cebu" } });
+    onSearch.mockClear();
+
+    await reset();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(signal.aborted).toBe(true);
+    expect(onSearch).not.toHaveBeenCalled();
+  });
+
   it("follows a controlled value", () => {
     renderInForm(<InputSearch label="Search" value="manila" />);
     expect(screen.getByRole("button", { name: "Clear search" })).toBeInTheDocument();

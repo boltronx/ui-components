@@ -47,6 +47,13 @@ describe("ColorSchemeScript", () => {
     expect(script.innerHTML).toBe(colorSchemeScript({ defaultMode: "dark" }));
     expect(script).toHaveAttribute("nonce", "abc");
   });
+
+  it("reads the storageKey, since React keeps key for itself", () => {
+    const { container } = render(<ColorSchemeScript storageKey="app-theme" />);
+    expect(container.querySelector("script")!.innerHTML).toBe(
+      colorSchemeScript({ key: "app-theme" })
+    );
+  });
 });
 
 describe("useColorScheme", () => {

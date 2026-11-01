@@ -47,42 +47,39 @@ const isClient = (code: string) => /^["']use client["'];/.test(code.trimStart())
 
 // Runs against dist, so it needs a current build first (CI builds before testing).
 const currentBuild = hasCurrentBuild("server component boundaries");
-describe.skipIf(!currentBuild)(
-  "server component boundaries",
-  () => {
-    const modules = (currentBuild ? builtModules(dist) : []).map(path => ({
-      name: relative(dist, path).replaceAll("\\", "/"),
-      code: readFileSync(path, "utf8")
-    }));
+describe.skipIf(!currentBuild)("server component boundaries", () => {
+  const modules = (currentBuild ? builtModules(dist) : []).map(path => ({
+    name: relative(dist, path).replaceAll("\\", "/"),
+    code: readFileSync(path, "utf8")
+  }));
 
-    it("finds the built modules", () => {
-      expect(modules.length).toBeGreaterThan(40);
-    });
+  it("finds the built modules", () => {
+    expect(modules.length).toBeGreaterThan(40);
+  });
 
-    it("marks every module that uses hooks, context or react-dom as a client module", () => {
-      const missing = modules
-        .filter(({ code }) => CLIENT_ONLY.test(code) && !isClient(code))
-        .map(({ name }) => name);
-      expect(missing).toEqual([]);
-    });
+  it("marks every module that uses hooks, context or react-dom as a client module", () => {
+    const missing = modules
+      .filter(({ code }) => CLIENT_ONLY.test(code) && !isClient(code))
+      .map(({ name }) => name);
+    expect(missing).toEqual([]);
+  });
 
-    it.each(SERVER_COMPONENTS)("keeps %s a server component", name => {
-      const module = modules.find(m => m.name === name);
-      expect(module, `${name} was not built`).toBeDefined();
-      expect(isClient(module!.code)).toBe(false);
-      expect(CLIENT_ONLY.test(module!.code)).toBe(false);
-    });
+  it.each(SERVER_COMPONENTS)("keeps %s a server component", name => {
+    const module = modules.find(m => m.name === name);
+    expect(module, `${name} was not built`).toBeDefined();
+    expect(isClient(module!.code)).toBe(false);
+    expect(CLIENT_ONLY.test(module!.code)).toBe(false);
+  });
 
-    it("puts the directive first, where bundlers look for it", () => {
-      const misplaced = modules
-        .filter(({ code }) => code.includes('"use client"') && !isClient(code))
-        .map(({ name }) => name);
-      expect(misplaced).toEqual([]);
-    });
+  it("puts the directive first, where bundlers look for it", () => {
+    const misplaced = modules
+      .filter(({ code }) => code.includes('"use client"') && !isClient(code))
+      .map(({ name }) => name);
+    expect(misplaced).toEqual([]);
+  });
 
-    it("keeps the barrel free of the directive, so it can re-export both kinds", () => {
-      const barrel = modules.find(m => m.name === "index.js")!;
-      expect(isClient(barrel.code)).toBe(false);
-    });
-  }
-);
+  it("keeps the barrel free of the directive, so it can re-export both kinds", () => {
+    const barrel = modules.find(m => m.name === "index.js")!;
+    expect(isClient(barrel.code)).toBe(false);
+  });
+});

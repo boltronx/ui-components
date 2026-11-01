@@ -48,10 +48,11 @@ function useCitySearch(log: (line: string) => void) {
   const [loading, setLoading] = useState(false);
   const search = (query: string, signal: AbortSignal) => {
     log(`request "${query}"`);
+    // Typing below the minimum length aborts without a new search; a new one sets loading again.
     signal.addEventListener("abort", () => {
       log(`cancelled "${query}"`);
       setLoading(false);
-    }, { once: true });
+    });
     setLoading(true);
     searchCities(query, signal)
       .then(setOptions)
