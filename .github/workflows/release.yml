@@ -4,8 +4,9 @@ name: Release
 #  - Automatic: merge a change to packages/<name>/package.json that sets a new version. Every
 #    package whose version isn't on npm yet is released.
 #  - Manual: run this workflow from the Actions tab for one package, optionally with a bump.
-# Tags and GitHub releases are per package (react-ui@v1.2.0, solid-ui@v1.2.0). Every step is
-# idempotent, so re-running a failed release finishes it without duplicating work.
+# Tags and GitHub releases are per package (react-ui@v1.2.0, solid-ui@v1.2.0). Every step after
+# the bump is idempotent, so a new run with no bump finishes a failed release without duplicating
+# work. A run that bumps always bumps again, so don't repeat one whose version commit was pushed.
 on:
   push:
     branches: [main]

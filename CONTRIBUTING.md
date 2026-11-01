@@ -28,7 +28,8 @@ Add `--open` to any of them to open the browser, e.g. `pnpm dev:solid --open`.
 ```
 packages/react-ui/            @boltronx/react-ui
 packages/solid-ui/            @boltronx/solid-ui
-  src/components/<Name>/      one folder per component: <Name>.tsx, with optional <Name>.css and <Name>.test.tsx
+  src/components/<Name>/      one folder per component: <Name>.tsx, and <Name>.css and
+                              <Name>.test.tsx when it has styles or tests of its own
   src/styles/                 tokens.css (theme variables), base.css, global.css
   scripts/build-css.mjs       combines the CSS files into dist/styles.css and dist/components.css
   test/ssr.test.tsx           renders everything as a server would, with no DOM
@@ -38,8 +39,9 @@ packages/react-ui/test/rsc.test.ts
                               checks which built modules are client and which are server components
 packages/solid-ui/test/handler-props.test.tsx
                               checks that props read in event handlers don't leak computations
-apps/docs-react/, apps/docs-solid/ the documentation sites, served at /react/ and /solid/
-  src/demos/<section>/        each demo is a file; the docs show its source next to it
+apps/docs-react/              the React documentation site, served at /react/
+apps/docs-solid/              the Solid documentation site, served at /solid/
+  src/demos/<section>/        in both: each demo is a file; the docs show its source next to it
 apps/landing/                 the site's root page (GitHub Pages)
 apps/next-fixture/            a Next.js App Router app built and checked by `pnpm test:fixtures`
 apps/start-fixture/           a SolidStart app built and checked by `pnpm test:fixtures`
@@ -95,7 +97,10 @@ a GitHub release with generated notes, grouped by pull request label (see `.gith
 `minor`, `major`, `prerelease`, ...) or an exact version, or leave it empty to publish the
 version already in `package.json`. Prereleases go to the `next` dist-tag unless you pick another.
 
-If a release fails after the version commit is pushed, rerun it with an empty version input to publish the existing version; rerunning the same bump would increment the version again.
+A release that failed can be finished by starting a new run with the version input empty: it
+publishes the version in `package.json`, and each step that already happened (tag, npm publish,
+GitHub release) is skipped. Don't run a bump again once its version commit is on `main`: it would
+bump the version a second time. "Re-run jobs" on a bump run fails too, as `main` has moved on.
 
 ### One-time setup
 
