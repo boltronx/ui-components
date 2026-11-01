@@ -166,7 +166,8 @@ describe("DatePicker far dates", () => {
     renderInForm(() => <DatePicker label="Due date" defaultValue="0000-02-15" />);
     screen.getByLabelText("Due date").focus();
     await userEvent.keyboard("{Enter}{PageUp}{PageUp}{PageUp}");
-    expect(screen.getByRole("dialog", { name: "Choose a date" })).toBeInTheDocument();
+    // findBy: the panel shows once positioned, on the next animation frame.
+    expect(await screen.findByRole("dialog", { name: "Choose a date" })).toBeInTheDocument();
     await userEvent.keyboard("{Enter}");
     expect(screen.getByLabelText("Due date")).toHaveValue(
       new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(
