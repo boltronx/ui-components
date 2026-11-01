@@ -39,11 +39,15 @@ const children = [
   spawn(...pnpm(["--filter", app, "dev", ...devArgs]))
 ];
 
-/** The port `next dev` listens on: its -p/--port argument, PORT, or 3000. */
+/**
+ * The port `next dev` listens on: its -p/--port argument, PORT, or 3000. As a number, so only
+ * digits reach the URL the browser is opened with.
+ */
 function nextPort(args) {
   const index = args.findIndex(arg => arg === "-p" || arg === "--port");
   const inline = args.find(arg => arg.startsWith("--port="));
-  return (index >= 0 ? args[index + 1] : inline?.slice(7)) ?? process.env.PORT ?? "3000";
+  const port = Number((index >= 0 ? args[index + 1] : inline?.slice(7)) ?? process.env.PORT);
+  return Number.isInteger(port) && port > 0 && port < 65536 ? port : 3000;
 }
 
 /** Opens `url` in the default browser once the server answers, as Vite's --open does. */
@@ -60,11 +64,10 @@ async function openWhenReady(url) {
   console.log(`[dev] opening ${url}`);
   // BROWSER=none skips it, as it does for Vite.
   if (process.env.BROWSER === "none") return;
-  const [command, args] =
-    process.platform === "win32"
-      ? ["cmd", ["/c", "start", "", url]]
-      : [process.platform === "darwin" ? "open" : "xdg-open", [url]];
-  spawn(command, args, { stdio: "ignore", detached: true }).unref();
+  // No shell: `cmd /c start` would interpret & and | in its arguments. Explorer opens a URL in
+  // the default browser, as `open` and `xdg-open` do elsewhere.
+  const command = { win32: "explorer", darwin: "open" }[process.platform] ?? "xdg-open";
+  spawn(command, [url], { stdio: "ignore", detached: true }).unref();
 }
 
 if (opensHere) void openWhenReady(`http://localhost:${nextPort(devArgs)}`);
