@@ -118,6 +118,16 @@ describe("message", () => {
     }
   });
 
+  it("keeps its limit when config is given NaN", () => {
+    message.config({ limit: NaN });
+    try {
+      inAct(() => message.success("Still shown", 2));
+      expect(screen.getByText("Still shown")).toBeInTheDocument();
+    } finally {
+      message.config({ limit: 3 });
+    }
+  });
+
   it("announces errors as an alert, read once", () => {
     inAct(() => message.error("Payment failed"));
     advance(50);

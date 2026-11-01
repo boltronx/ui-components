@@ -280,7 +280,10 @@ export const message = {
   },
   /** Changes how many messages show at once. */
   config(config: MessageConfig) {
-    if (config.limit !== undefined) limit = Math.max(1, Math.floor(config.limit));
+    // NaN would compare false with every count and stop all messages; Infinity means no limit.
+    if (config.limit !== undefined && !Number.isNaN(config.limit)) {
+      limit = Math.max(1, Math.floor(config.limit));
+    }
     drain();
   }
 };
