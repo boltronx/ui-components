@@ -1,4 +1,15 @@
-import { type Accessor, createEffect, createMemo, createRoot, createSignal, on } from "solid-js";
+import {
+  type Accessor,
+  createEffect,
+  createMemo,
+  createRoot,
+  createSignal,
+  getOwner,
+  on,
+  onMount,
+  runWithOwner,
+  sharedConfig
+} from "solid-js";
 
 import {
   type ColorScheme,
@@ -37,21 +48,36 @@ function applyScheme(scheme: ColorScheme) {
   html.classList.remove("bx-theme-switching");
 }
 
-function createColorScheme(key: string, defaultMode: ColorSchemeMode): ColorSchemeState {
+interface ColorSchemeStore extends ColorSchemeState {
+  /** Reads the saved mode and the OS preference, then follows and applies them. Runs once. */
+  start: () => void;
+}
+
+function createColorScheme(key: string, defaultMode: ColorSchemeMode): ColorSchemeStore {
   return createRoot(() => {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const [mode, setModeSignal] = createSignal<ColorSchemeMode>(readMode(key) ?? defaultMode);
-    const [systemDark, setSystemDark] = createSignal(media.matches);
+    const owner = getOwner();
+    // Until started, what the server rendered: it can read neither storage nor the OS preference.
+    const [mode, setModeSignal] = createSignal<ColorSchemeMode>(defaultMode);
+    const [systemDark, setSystemDark] = createSignal(false);
     const scheme = createMemo<ColorScheme>(() =>
       mode() === "system" ? (systemDark() ? "dark" : "light") : (mode() as ColorScheme)
     );
 
-    media.addEventListener("change", event => setSystemDark(event.matches));
-    // Keeps every open tab on the same mode.
-    window.addEventListener("storage", event => {
-      if (event.key === key) setModeSignal(parseMode(event.newValue) ?? defaultMode);
-    });
-    createEffect(on(scheme, applyScheme));
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      setSystemDark(media.matches);
+      setModeSignal(readMode(key) ?? mode());
+      media.addEventListener("change", event => setSystemDark(event.matches));
+      // Keeps every open tab on the same mode.
+      window.addEventListener("storage", event => {
+        if (event.key === key) setModeSignal(parseMode(event.newValue) ?? defaultMode);
+      });
+      // Only now: the server's scheme would undo what colorSchemeScript set before first paint.
+      runWithOwner(owner, () => createEffect(on(scheme, applyScheme)));
+    };
 
     const setMode = (next: ColorSchemeMode) => {
       setModeSignal(next);
@@ -62,16 +88,17 @@ function createColorScheme(key: string, defaultMode: ColorSchemeMode): ColorSche
       }
     };
 
-    return { mode, scheme, setMode };
+    return { mode, scheme, setMode, start };
   });
 }
 
-const states = new Map<string, ColorSchemeState>();
+const states = new Map<string, ColorSchemeStore>();
 
 /**
  * Reads and changes the color scheme. Every caller with the same `key` shares one state, so a
  * toggle in one component updates the others. Pair it with `colorSchemeScript` in <head> to avoid
- * a flash of the wrong scheme on load.
+ * a flash of the wrong scheme on load. While hydrating it gives what the server rendered (the
+ * default), so the first client render matches; the saved mode takes over once hydration is done.
  */
 export function useColorScheme(options: ColorSchemeOptions = {}): ColorSchemeState {
   const key = options.key ?? DEFAULT_COLOR_SCHEME_KEY;
@@ -85,5 +112,9 @@ export function useColorScheme(options: ColorSchemeOptions = {}): ColorSchemeSta
     state = createColorScheme(key, defaultMode);
     states.set(key, state);
   }
-  return state;
+  // Hydrating, the first render must match the server's, so storage is read once it is done.
+  if (sharedConfig.context) onMount(state.start);
+  else state.start();
+  const { mode, scheme, setMode } = state;
+  return { mode, scheme, setMode };
 }

@@ -52,7 +52,13 @@ function ThemeLabel(props: { schemeKey?: string }) {
   // Read once, as the key picks which shared state to use.
   // eslint-disable-next-line solid/reactivity
   const { scheme } = useColorScheme({ key: props.schemeKey });
-  return <Text component="span">Theme: {scheme()}</Text>;
+  return (
+    <Text component="span">
+      Theme: {scheme()}
+      {/* Different elements per scheme, as a theme toggle's icon would be. */}
+      {scheme() === "dark" ? <b data-scheme="dark"> (moon)</b> : <i data-scheme="light"> (sun)</i>}
+    </Text>
+  );
 }
 
 export function KitchenSink(props: { schemeKey?: string }) {
