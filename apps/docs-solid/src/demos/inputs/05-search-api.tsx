@@ -30,7 +30,11 @@ export default function Demo() {
   const [requests, setRequests] = createSignal(0);
 
   const search = (query: string, signal: AbortSignal) => {
-    if (!query) return setResults([]);
+    if (!query) {
+      setLoading(false);
+      return setResults([]);
+    }
+    signal.addEventListener("abort", () => setLoading(false), { once: true });
     setRequests(count => count + 1);
     setLoading(true);
     searchFruits(query, signal)
