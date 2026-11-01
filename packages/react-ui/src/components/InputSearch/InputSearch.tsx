@@ -50,9 +50,10 @@ export function InputSearch({
   const input = useRef<HTMLInputElement>(null);
   const inputRef = useMergedRefs(input, ref);
 
-  useFormReset(input, () =>
-    afterFormReset(() => setHasValue((input.current?.value.length ?? 0) > 0))
-  );
+  useFormReset(input, () => {
+    search.cancel();
+    afterFormReset(() => setHasValue((input.current?.value.length ?? 0) > 0));
+  });
 
   const clear = () => {
     const element = input.current;
