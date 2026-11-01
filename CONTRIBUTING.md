@@ -28,7 +28,7 @@ Add `--open` to any of them to open the browser, e.g. `pnpm dev:solid --open`.
 ```
 packages/react-ui/            @boltronx/react-ui
 packages/solid-ui/            @boltronx/solid-ui
-  src/components/<Name>/      one folder per component: <Name>.tsx, <Name>.css, <Name>.test.tsx
+  src/components/<Name>/      one folder per component: <Name>.tsx, with optional <Name>.css and <Name>.test.tsx
   src/styles/                 tokens.css (theme variables), base.css, global.css
   scripts/build-css.mjs       combines the CSS files into dist/styles.css and dist/components.css
   test/ssr.test.tsx           renders everything as a server would, with no DOM
