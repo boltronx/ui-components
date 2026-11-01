@@ -1,0 +1,27 @@
+.bx-Code {
+  padding: 0.1em 0.35em;
+  font-family: var(--bx-font-family-mono);
+  font-size: 0.85em;
+  color: var(--bx-text-strong);
+  background: var(--bx-surface-active);
+  border-radius: var(--bx-radius-md);
+  /* Long inline code wraps instead of pushing the page wider on phones */
+  overflow-wrap: anywhere;
+
+  &[data-block] {
+    margin: 0;
+    padding: var(--bx-spacing-md);
+    overflow-x: auto;
+    font-size: var(--bx-font-size-xs);
+    line-height: 1.6;
+    white-space: pre;
+    background: var(--bx-surface-hover);
+    border: 1px solid var(--bx-border);
+    border-radius: var(--bx-radius-md);
+    user-select: text;
+
+    > code {
+      font: inherit;
+    }
+  }
+}

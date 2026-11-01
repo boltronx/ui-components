@@ -1,0 +1,9 @@
+.bx-InputNumber {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bx-InputNumber-currency {
+  font-size: var(--bx-font-size-sm);
+  font-weight: 600;
+}

@@ -1,0 +1,38 @@
+.bx-SplitButton-menu {
+  display: inline-flex;
+}
+
+.bx-SplitButton-fullWidth {
+  width: 100%;
+}
+
+.bx-SplitButton {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Compound selectors: override .bx-Button whatever the file order */
+.bx-Button.bx-SplitButton-main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
+  /* A divider between the halves, so filled variants still read as two buttons */
+  &:not([data-variant="default"]) {
+    border-right-color: color-mix(in oklab, var(--bx-button-color), transparent 70%);
+  }
+}
+
+.bx-Button.bx-SplitButton-toggle {
+  width: var(--bx-control-height);
+  min-width: 0;
+  padding: 0;
+  border-left-width: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+
+  > .bx-Button-label > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}

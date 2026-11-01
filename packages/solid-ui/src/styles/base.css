@@ -1,0 +1,48 @@
+/* Rules the components rely on. Shipped in both styles.css and components.css. */
+
+/* Only library elements, so an app that uses content-box keeps it. */
+:where([class^="bx-"], [class*=" bx-"]),
+:where([class^="bx-"], [class*=" bx-"])::before,
+:where([class^="bx-"], [class*=" bx-"])::after {
+  box-sizing: border-box;
+}
+
+/* Set on <html> while a modal is open */
+.bx-scroll-locked {
+  overflow: hidden;
+}
+
+/* Set on <html> for one frame while the color scheme changes, so colors swap without animating */
+.bx-theme-switching *,
+.bx-theme-switching *::before,
+.bx-theme-switching *::after {
+  transition: none !important;
+}
+
+/* Read by screen readers, not shown: labels and live announcements without visible text. */
+.bx-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+  Windows High Contrast and other forced-colors modes drop box-shadow, which draws every focus
+  ring, so an outline stands in for it there. The same goes for the option the arrow keys have
+  highlighted while focus stays in the field.
+*/
+@media (forced-colors: active) {
+  :is([class^="bx-"], [class*=" bx-"]):focus-visible,
+  .bx-Switch-input:focus-visible + .bx-Switch-track,
+  .bx-Combobox-option[data-active],
+  .bx-DatePicker-cell[data-active] {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,153 @@
+.bx-Field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bx-spacing-xs);
+  min-width: 0;
+}
+
+.bx-Field-label {
+  margin: 0;
+  font-size: var(--bx-font-size-sm);
+  font-weight: 600;
+}
+
+.bx-Field-required {
+  margin-left: 0.125rem;
+  color: var(--bx-danger);
+}
+
+.bx-Field-description {
+  margin: -0.125rem 0 0.125rem;
+  font-size: var(--bx-font-size-xs);
+  color: var(--bx-text-dimmed);
+}
+
+.bx-Field-error {
+  margin: 0;
+  font-size: var(--bx-font-size-xs);
+  color: var(--bx-danger);
+
+  &:empty {
+    display: none;
+  }
+}
+
+/* The shared control look for inputs, textareas and select triggers */
+.bx-Input {
+  position: relative;
+}
+
+.bx-Input-control {
+  display: block;
+  width: 100%;
+  min-height: var(--bx-control-height);
+  margin: 0;
+  padding: 0 var(--bx-spacing-sm);
+  font: inherit;
+  font-size: var(--bx-font-size-sm);
+  color: var(--bx-text);
+  background: var(--bx-surface);
+  border: 1px solid var(--bx-border);
+  border-radius: var(--bx-radius-sm);
+  outline: none;
+  transition: border-color var(--bx-duration) ease;
+
+  &::placeholder {
+    color: var(--bx-placeholder);
+    opacity: 1;
+  }
+
+  &:focus,
+  &[data-expanded] {
+    border-color: var(--bx-focus);
+  }
+
+  &[data-readonly] {
+    border-style: dashed;
+
+    &:focus {
+      border-color: var(--bx-border);
+    }
+  }
+
+  &[aria-invalid="true"] {
+    border-color: var(--bx-danger);
+  }
+
+  &:disabled,
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--bx-disabled-opacity);
+  }
+
+  .bx-Input[data-with-left] > & {
+    padding-left: var(--bx-control-height);
+  }
+
+  .bx-Input[data-with-right] > & {
+    padding-right: var(--bx-control-height);
+  }
+}
+
+.bx-Input-section {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--bx-control-height);
+  height: 100%;
+  overflow: hidden;
+  color: var(--bx-text-dimmed);
+
+  &[data-position="left"] {
+    left: 0;
+  }
+
+  &[data-position="right"] {
+    right: 0;
+  }
+
+  > svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .bx-Input[data-disabled] > & {
+    opacity: 0.5;
+  }
+}
+
+/* An icon button inside a section, e.g. show password or clear search */
+.bx-Input-sectionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0.25rem;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--bx-radius-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--bx-duration) ease,
+    color var(--bx-duration) ease;
+
+  &:hover {
+    color: var(--bx-text);
+    background: var(--bx-surface-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--bx-focus-ring);
+  }
+
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+}

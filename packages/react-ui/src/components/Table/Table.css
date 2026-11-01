@@ -73,6 +73,12 @@
     background: var(--bx-surface);
   }
 
+  /* Fixed cells paint their own background, so they fade with the row on hover rather than
+     switching at once while the rest of the row catches up. */
+  &.bx-Table-td[data-fixed] {
+    transition: background-color var(--bx-duration) ease;
+  }
+
   &[data-fixed="left"] {
     left: 0;
   }

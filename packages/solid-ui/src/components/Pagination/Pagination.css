@@ -1,0 +1,31 @@
+.bx-Pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bx-spacing-xs);
+
+  /* Compound selector: overrides .bx-Button whatever the file order */
+  > .bx-Button.bx-Button {
+    min-width: var(--bx-control-height);
+    padding: 0 0.65rem;
+    font-size: var(--bx-font-size-xs);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bx-Pagination-gap,
+.bx-Pagination-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: var(--bx-control-height);
+  font-size: var(--bx-font-size-xs);
+  color: var(--bx-text-dimmed);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.bx-Pagination-status {
+  padding: 0 var(--bx-spacing-sm);
+}
