@@ -38,7 +38,7 @@ packages/react-ui/test/rsc.test.ts
                               checks which built modules are client and which are server components
 packages/solid-ui/test/handler-props.test.tsx
                               checks that props read in event handlers don't leak computations
-apps/docs-react/, docs-solid/ the documentation sites, served at /react/ and /solid/
+apps/docs-react/, apps/docs-solid/ the documentation sites, served at /react/ and /solid/
   src/demos/<section>/        each demo is a file; the docs show its source next to it
 apps/landing/                 the site's root page (GitHub Pages)
 apps/next-fixture/            a Next.js App Router app built and checked by `pnpm test:fixtures`
