@@ -10,6 +10,7 @@
 [![Docs](https://github.com/boltronx/ui-components/actions/workflows/pages.yml/badge.svg)](https://boltronx.github.io/ui-components/solid/)
 [![Tree-shakeable](https://img.shields.io/badge/tree--shakeable-yes-brightgreen)](https://github.com/boltronx/ui-components/blob/main/packages/solid-ui/test/treeshake.test.ts)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/boltronx/ui-components/badge)](https://scorecard.dev/viewer/?uri=github.com/boltronx/ui-components)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16170/badge)](https://www.bestpractices.dev/projects/16170)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/boltronx/ui-components/blob/main/LICENSE)
 
 Simple, themeable [SolidJS](https://www.solidjs.com/) components that work with plain HTML forms.

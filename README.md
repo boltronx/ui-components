@@ -1,5 +1,8 @@
 # BoltronX UI Components
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/boltronx/ui-components/badge)](https://scorecard.dev/viewer/?uri=github.com/boltronx/ui-components)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16170/badge)](https://www.bestpractices.dev/projects/16170)
+
 Simple, themeable components for **React** and **SolidJS** that work with plain HTML forms and
 server rendering, from one repository and one set of styles.
 
