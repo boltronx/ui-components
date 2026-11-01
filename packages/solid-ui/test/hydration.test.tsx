@@ -46,13 +46,15 @@ describe("hydration", () => {
   });
 
   it("reuses the server's elements instead of rendering new ones", () => {
-    const serverInput = (() => {
-      const probe = document.createElement("div");
-      probe.innerHTML = inject("kitchenSinkHtml");
-      return probe.querySelectorAll("input").length;
-    })();
-    const { container } = hydrateKitchenSink();
-    expect(container.querySelectorAll("input")).toHaveLength(serverInput);
+    new Function(inject("hydrationScript"))();
+    const container = document.createElement("div");
+    container.innerHTML = inject("kitchenSinkHtml");
+    document.body.appendChild(container);
+    const serverInputs = Array.from(container.querySelectorAll("input"));
+    dispose = hydrate(() => <KitchenSink />, container);
+    const hydratedInputs = Array.from(container.querySelectorAll("input"));
+    expect(hydratedInputs).toHaveLength(serverInputs.length);
+    hydratedInputs.forEach((input, i) => expect(input).toBe(serverInputs[i]));
   });
 
   it("keeps the server's ids, so labels stay linked to their fields", () => {
