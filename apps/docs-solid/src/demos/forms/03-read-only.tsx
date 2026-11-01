@@ -46,7 +46,13 @@ export default function Demo() {
         <Group justify="flex-end">
           {editing() ? (
             <>
-              <Button type="reset" onClick={() => setEditing(false)}>
+              <Button
+                type="button"
+                onClick={event => {
+                  event.currentTarget.form?.reset();
+                  setEditing(false);
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="primary">
