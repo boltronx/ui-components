@@ -98,7 +98,7 @@
     "jsdom": "^30.1.3",
     "lightningcss": "^1.33.0",
     "publint": "^0.3.25",
-    "solid-js": "^1.9.17",
+    "solid-js": "^1.9.18",
     "tsup": "^9.0.0",
     "tsup-preset-solid": "^2.2.0",
     "vite": "^8.3.5",
